@@ -11,7 +11,7 @@ class MouvementCredit extends Model
      *
      * @var string
      */
-    protected $table = 'mouvement_credits';
+    protected $table = 'MouvementCredits';
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,7 @@ class MouvementCredit extends Model
     protected $fillable = [
         'id',
         'id_user',
-        'id_gestion_validation',
+        'id_gestionValidation',
         'type_mouvement',
         'date_operation',
         'montant',

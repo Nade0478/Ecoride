@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('voitures', function (Blueprint $table) {
-            $table->id('id_voiture');
-            $table->string('immatriculation', 50);
-            $table->string('couleur', 50);
-            $table->string('energie', 50);
-            $table->date('date_mise_en_circulation');
-            $table->foreignId('car_model_id')->constrained('car_models');
+        Schema::create('transactions_stripe', function (Blueprint $table) {
+            $table->id('id_transaction');
             $table->foreignId('utilisateur_id')->constrained('utilisateurs');
+            $table->decimal('montant_euros', 8, 2);
+            $table->integer('montant_credits');
+            $table->string('status', 50);
+            $table->timestamp('date_paiement')->useCurrent();
+            $table->string('stripe_payment_id')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('voitures');
+        Schema::dropIfExists('transactions_stripes');
     }
 };

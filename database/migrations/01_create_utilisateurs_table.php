@@ -12,26 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('utilisateurs', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('pseudo')->unique();
-            $table->date('date_naissance')->nullable();
-            $table->string('adresse')->nullable();
-            $table->integer('code_postal')->nullable();
-            $table->string('ville')->nullable();
-            $table->string('telephone')->nullable();
-            $table->integer('credit-dépenser')->default('0');
-            $table->integer('credit-gagner')->default('0');
-            $table->string('photo')->nullable();
-            $table->enum('role', ['admin', 'covoitureur', 'salarié', 'conducteur'])->default('covoitureur');
-            $table->enum('statut', ['Conducteur', 'Covoitureur-Conducteur', 'Covoitureur', 'Admin', 'Salarié'])->default('Covoitureur');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->id('id_utilisateur');
+            $table->string('nom', 50);
+            $table->string('prenom', 50);
+            $table->string('email', 50)->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('telephone', 50)->nullable();
+            $table->string('adresse', 50)->nullable();
+            $table->string('cp', 50)->nullable();
+            $table->string('ville', 50)->nullable();
+            $table->date('date_naissance')->nullable();
+            $table->string('photo', 50)->nullable();
+            $table->string('pseudo', 50)->nullable();
+            $table->integer('credit_depenser')->default(0);
+            $table->integer('credit_gagner')->default(0);
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
