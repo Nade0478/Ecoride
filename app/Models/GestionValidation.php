@@ -25,7 +25,7 @@ class GestionValidation extends Model
     ];
 
     /**
-     * Relation avec l'utilisateur qui a effectué la validation.
+     * Relation avec l'user qui a effectué la validation.
      */
     public function user()
     {
@@ -37,6 +37,6 @@ class GestionValidation extends Model
      */
     public function mouvementCredit()
     {
-        return $this->belongsTo(MouvementCredit::class, 'id_mouvement_credit');
+        return $this->belongsTo(MouvementCredit::class, 'id_MouvementCredit');
     }
 }
