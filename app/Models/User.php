@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Utilisateur extends Model
+class User extends Model
 {
-    protected $table = 'utilisateurs';
+    protected $table = 'users';
 
     protected $fillable = [
         'nom', 'prenom', 'email', 'password', 'telephone',
@@ -19,6 +19,6 @@ class Utilisateur extends Model
     }
     public function voitures()
     {
-        return $this->hasMany(Voiture::class, 'utilisateur_id');
+        return $this->hasMany(Voiture::class, 'user_id');
     }
 }

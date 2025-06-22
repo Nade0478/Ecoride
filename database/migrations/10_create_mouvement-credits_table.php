@@ -7,21 +7,30 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Exécute les migrations.
      */
     public function up(): void
     {
-        Schema::create('mouvement-credits', function (Blueprint $table) {
-            $table->id();
+        Schema::create('mouvement_credits', function (Blueprint $table) {
+            $table->id('id_mouvement_credit');
+
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+
+            $table->enum('type_mouvement', ['credit', 'debit']);
+            $table->decimal('montant', 8, 2);
+            $table->string('motif', 100)->nullable(); // optionnel : bonus, achat, remboursement, etc.
+            $table->timestamp('date_mouvement')->useCurrent();
+
             $table->timestamps();
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Annule les migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('mouvement-credits');
+        Schema::dropIfExists('mouvement_credits');
     }
 };

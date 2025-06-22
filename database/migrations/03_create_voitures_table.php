@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('energie', 50);
             $table->date('date_mise_en_circulation');
             $table->foreignId('car_model_id')->constrained('car_models');
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
 

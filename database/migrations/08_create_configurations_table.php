@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('configurations', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_configuration');
+            $table->string('id_parametre', 100)->unique();
             $table->timestamps();
         });
     }
