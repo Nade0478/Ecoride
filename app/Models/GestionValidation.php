@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
+use App\Models\Utilisateur;
 use App\Models\MouvementCredit;
 
 class GestionValidation extends Model
@@ -17,7 +17,7 @@ class GestionValidation extends Model
     // Attributs pouvant être remplis en masse
     protected $fillable = [
         'id_gestion_validation',
-        'id_user',
+        'id_utilisateur',
         'id_mouvement_credit',
         'type_mouvement',
         'date_operation',
@@ -25,11 +25,11 @@ class GestionValidation extends Model
     ];
 
     /**
-     * Relation avec l'user qui a effectué la validation.
+     * Relation avec l'utilisateur qui a effectué la validation.
      */
-    public function user()
+    public function utilisateur()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
 
     /**

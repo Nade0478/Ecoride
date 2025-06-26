@@ -18,9 +18,9 @@ class Voiture extends Model
         'utilisateur_id'
     ];
 
-    public function user()
+    public function utilisateur()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Utilisateur::class);
     }
     public function marque()
     {

@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Parametre extends Model
+class ParametresApp extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'parametres';
+    protected $table = 'parametresApps';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,7 @@ class Parametre extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'id_parametre',
+        'id_parametresApp',
         'propriete',
         'valeur',
     ];

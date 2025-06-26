@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Configuration;
+use App\Models\Reglage;
 use Illuminate\Http\Request;
 
-class Configuration extends Controller
+class Reglage extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class Configuration extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Configuration $configuration)
+    public function show(Reglage $reglage)
     {
         //
     }
@@ -35,7 +35,7 @@ class Configuration extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Configuration $configuration)
+    public function update(Request $request, Reglage $reglage)
     {
         //
     }
@@ -43,7 +43,7 @@ class Configuration extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Configuration $configuration)
+    public function destroy(Reglage $reglage)
     {
         //
     }

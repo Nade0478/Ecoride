@@ -10,7 +10,7 @@ class Avis extends Model
 
     protected $fillable = [
         'id_avis',
-        'id_user',
+        'id_utilisateur',
         'note',
         'commentaire',
         'statut',
@@ -19,7 +19,7 @@ class Avis extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
     public function covoiturage()
     {

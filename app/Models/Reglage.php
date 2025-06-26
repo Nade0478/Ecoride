@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Configuration extends Model
+class Reglage extends Model
 {
-    protected $table = 'configurations';
+    protected $table = 'reglages';
 
     protected $fillable = [
-        'id_configuration',
+        'id_reglage',
     ];
 
     public function getValueAttribute($value)

@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('parametres', function (Blueprint $table) {
-            $table->id('id_parametre');
+        Schema::create('reglages', function (Blueprint $table) {
+            $table->id('id_reglage');
             $table->string('propriete', 50)->unique();
             $table->string('valeur', 50);
         });
@@ -17,6 +17,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('parametres');
+        Schema::dropIfExists('reglages');
     }
 };

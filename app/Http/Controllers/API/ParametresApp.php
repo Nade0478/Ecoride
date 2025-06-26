@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Parametre;
+use App\Models\Param;
 use Illuminate\Http\Request;
 
-class Parametre extends Controller
+class ParametresApp extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class Parametre extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Parametre $parametre)
+    public function show(ParametresApp $parametresApp)
     {
         //
     }
@@ -35,7 +35,7 @@ class Parametre extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Parametre $parametre)
+    public function update(Request $request, ParametresApp $parametresApp)
     {
         //
     }
@@ -43,7 +43,7 @@ class Parametre extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Parametre $parametre)
+    public function destroy(ParametresApp $parametresApp)
     {
         //
     }
