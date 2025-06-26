@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('voitures', function (Blueprint $table) {
@@ -17,16 +14,15 @@ return new class extends Migration
             $table->string('couleur', 50);
             $table->string('energie', 50);
             $table->date('date_mise_en_circulation');
-            $table->foreignId('car_model_id')->constrained('car_models');
-            $table->foreignId('user_id')->constrained('users');
+
+            // Relations
+            $table->foreignId('id_model')->constrained('car_models');
+            $table->foreignId('id_utilisateur')->constrained('utilisateurs');
+
             $table->timestamps();
         });
-
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('voitures');

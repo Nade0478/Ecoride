@@ -6,21 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Exécute les migrations.
-     */
     public function up(): void
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id('id_role');
-            $table->string('libelle', 50); // Exemple : "Administrateur", "Conducteur", "Passager"
+            $table->string('nom_role', 50)->unique(); // ex. : "Administrateur", "Conducteur", "Passager"
+            $table->string('permissions', 100)->nullable(); // si le MCD prévoit un champ pour les droits associés
             $table->timestamps();
         });
     }
 
-    /**
-     * Annule les migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('roles');

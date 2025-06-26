@@ -6,29 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('id_user');
+        Schema::create('utilisateurs', function (Blueprint $table) {
+            $table->id('id_utilisateur');
             $table->string('nom', 50);
             $table->string('prenom', 50);
             $table->string('email', 50)->unique();
             $table->string('password');
             $table->string('telephone', 50)->nullable();
             $table->string('adresse', 50)->nullable();
-            $table->string('cp', 50)->nullable();
+            $table->string('cp', 10)->nullable();
             $table->string('ville', 50)->nullable();
             $table->date('date_naissance')->nullable();
-            $table->string('photo', 50)->nullable();
+            $table->string('photo', 100)->nullable();
             $table->string('pseudo', 50)->nullable();
             $table->integer('credit_depenser')->default(0);
             $table->integer('credit_gagner')->default(0);
+
+            $table->foreignId('id_role')->constrained('roles')->onDelete('cascade');
+
             $table->timestamps();
         });
-
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
@@ -38,7 +37,7 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('id_utilisateur')->nullable()->constrained('utilisateurs')->onDelete('cascade');
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -46,13 +45,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('intervenants');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('utilisateurs');
     }
 };

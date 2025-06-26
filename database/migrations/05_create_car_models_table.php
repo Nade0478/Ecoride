@@ -6,21 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('car_models', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom-model', 100);
+            $table->id('id_model');
+            $table->string('nom_modele', 50);
+            $table->unsignedBigInteger('id_marque');
+            $table->foreign('id_marque')->references('id_marque')->on('marques')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('car_models');
