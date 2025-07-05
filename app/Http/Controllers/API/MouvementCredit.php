@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\MouvementCredit;
 use Illuminate\Http\Request;
 
 class MouvementCredit extends Controller

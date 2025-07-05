@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Avis;
 use Illuminate\Http\Request;
 
 class Avis extends Controller

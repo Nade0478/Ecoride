@@ -17,7 +17,7 @@ class Avis extends Model
         'id_covoiturage',
     ];
 
-    public function user()
+    public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }

@@ -27,9 +27,9 @@ class Covoiturage extends Model
     ];
 
     /**
-     * Relation avec l'user (conducteur)
+     * Relation avec l'utilisateur (conducteur)
      */
-    public function user()
+    public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }

@@ -20,7 +20,7 @@ class MouvementCredit extends Model
      */
     protected $fillable = [
         'id',
-        'id_user',
+        'id_utilisateur',
         'id_gestionValidation',
         'type_mouvement',
         'date_operation',

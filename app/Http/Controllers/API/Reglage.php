@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Reglage;
 use Illuminate\Http\Request;
 
 class Reglage extends Controller

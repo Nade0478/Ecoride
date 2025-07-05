@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\TransactionsStripe;
 use Illuminate\Http\Request;
 
 class TransactionsStripe extends Controller
