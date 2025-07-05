@@ -9,9 +9,19 @@ class Utilisateur extends Model
     protected $table = 'utilisateurs';
 
     protected $fillable = [
-        'nom', 'prenom', 'email', 'password', 'telephone',
-        'adresse', 'cp', 'ville', 'date_naissance', 'photo',
-        'pseudo', 'credit_depenser', 'credit_gagner'
+        'nom',
+        'prenom',
+        'email',
+        'password',
+        'telephone',
+        'adresse',
+        'cp',
+        'ville',
+        'date_naissance',
+        'photo',
+        'pseudo',
+        'credit_depenser',
+        'credit_gagner'
     ];
     public function roles()
     {
@@ -19,6 +29,6 @@ class Utilisateur extends Model
     }
     public function voitures()
     {
-        return $this->hasMany(Voiture::class, 'utilisateur_id');
+        return $this->hasMany(Voiture::class, 'voiture_id');
     }
 }

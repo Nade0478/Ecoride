@@ -9,8 +9,12 @@ class TransactionsStripe extends Model
     protected $table = 'transactions_stripe';
 
     protected $fillable = [
-        'utilisateur_id', 'montant_euros', 'date_paiement',
-        'status', 'montant_credits', 'stripe_payment_id'
+        'id_transactions_stripe',
+        'montant_euros',
+        'date_paiement',
+        'status',
+        'montant_credits',
+        'id_utilisateur',
     ];
 }
 

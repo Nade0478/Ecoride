@@ -19,7 +19,7 @@ class MouvementCredit extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'id',
+        'id_mouvementCredit',
         'id_utilisateur',
         'id_gestionValidation',
         'type_mouvement',
