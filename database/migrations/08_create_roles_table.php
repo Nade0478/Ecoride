@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id('id_role');
-            $table->string('nom_role', 50)->unique(); // ex. : "Administrateur", "Conducteur", "Passager"
-            $table->string('permissions', 100)->nullable(); // si le MCD prévoit un champ pour les droits associés
+            $table->string('nom_role', 50)->unique(); // ex : "Administrateur", "Salarié", "Conducteur", "Passager"
+            $table->json('permissions')->nullable(); // Format JSON plus flexible pour stocker plusieurs droits
             $table->timestamps();
         });
     }

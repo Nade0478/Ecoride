@@ -11,11 +11,25 @@ return new class extends Migration
         Schema::create('mouvement_credits', function (Blueprint $table) {
             $table->id('id_mouvement_credit');
 
-            $table->foreignId('id_utilisateur')->constrained('utilisateurs')->onDelete('cascade');
+            // Relation avec les utilisateurs
+            $table->foreignId('id_utilisateur')
+                  ->constrained('utilisateurs')
+                  ->onDelete('cascade');
 
-            $table->enum('type_mouvement', ['credit', 'debit']);
-            $table->decimal('montant', 8, 2);
-            $table->string('motif', 100)->nullable(); // Ex : bonus, achat, remboursement...
+            // Type du mouvement : credit ou debit
+            $table->enum('type_mouvement', ['credit', 'debit'])
+                  ->default('credit')
+                  ->comment('Type de mouvement financier');
+
+            // Montant en crédits, positif
+            $table->unsignedDecimal('montant', 8, 2)
+                  ->comment('Montant du mouvement en crédits');
+
+            // Motif métier : achat, bonus, remboursement, etc.
+            $table->string('motif', 100)->nullable()
+                  ->comment('Ex : bonus, achat, remboursement');
+
+            // Date de l’opération (ajout automatique par défaut)
             $table->dateTime('date_operation')->useCurrent();
 
             $table->timestamps();

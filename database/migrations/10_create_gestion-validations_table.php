@@ -12,13 +12,24 @@ return new class extends Migration
             $table->id('id_gestion_validation');
 
             // Utilisateur qui valide
-            $table->foreignId('id_utilisateur')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('id_utilisateur')
+                  ->constrained('utilisateurs')
+                  ->onDelete('cascade');
 
-            // Mouvement concerné
-            $table->foreignId('id_mouvement_credit')->constrained('mouvement_credits')->onDelete('cascade');
+            // Mouvement crédit concerné
+            $table->foreignId('id_mouvement_credit')
+                  ->constrained('mouvement_credits')
+                  ->onDelete('cascade');
 
-            $table->enum('type_mouvement', ['credit', 'debit']);
-            $table->decimal('montant', 8, 2);
+            // Type du mouvement validé : crédit ou débit
+            $table->enum('type_mouvement', ['credit', 'debit'])
+                  ->comment('Type du mouvement validé');
+
+            // Montant validé (positif, typiquement)
+            $table->unsignedDecimal('montant', 8, 2)
+                  ->comment('Montant validé en crédits');
+
+            // Date de l’opération validée
             $table->dateTime('date_operation')->useCurrent();
 
             $table->timestamps();
