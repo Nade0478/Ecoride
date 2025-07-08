@@ -10,9 +10,13 @@ return new class extends Migration
     {
         Schema::create('car_models', function (Blueprint $table) {
             $table->id('id_model');
-            $table->string('nom_modele', 50);
-            $table->unsignedBigInteger('id_marque');
-            $table->foreign('id_marque')->references('id_marque')->on('marques')->onDelete('cascade');
+            $table->string('car_models', 50); // renommé pour rester cohérent avec la table 'marques'
+
+            // Relation
+            $table->foreignId('id_marque')
+                  ->constrained('marques')
+                  ->onDelete('cascade');
+
             $table->timestamps();
         });
     }

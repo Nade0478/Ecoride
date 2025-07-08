@@ -14,19 +14,23 @@ return new class extends Migration
             $table->date('date_arrivee')->nullable();
             $table->time('heure_depart');
             $table->time('heure_arrivee')->nullable();
-            $table->string('lieu_depart', 50);
-            $table->string('lieu_arrivee', 50);
-            $table->integer('nombre_place');
-            $table->boolean('ecologique');
-            $table->boolean('accepte_fumeur');
-            $table->boolean('accepte_animal');
+            $table->string('lieu_depart', 100);
+            $table->string('lieu_arrivee', 100);
+            $table->unsignedInteger('nombre_place');
+            $table->boolean('ecologique')->default(false);
+            $table->boolean('accepte_fumeur')->default(false);
+            $table->boolean('accepte_animal')->default(false);
+            $table->unsignedBigInteger('prix_credit');
+            $table->string('statut', 50)->default('disponible'); 
 
             // Relations
-            $table->unsignedBigInteger('id_utilisateur');
-            $table->foreign('id_utilisateur')->references('id_utilisateur')->on('utilisateurs')->onDelete('cascade');
+            $table->foreignId('id_utilisateur')
+                  ->constrained('utilisateurs')
+                  ->onDelete('cascade');
 
-            $table->unsignedBigInteger('id_voiture');
-            $table->foreign('id_voiture')->references('id_voiture')->on('voitures')->onDelete('cascade');
+            $table->foreignId('id_voiture')
+                  ->constrained('voitures')
+                  ->onDelete('cascade');
 
             $table->timestamps();
         });
