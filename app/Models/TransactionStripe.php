@@ -29,4 +29,15 @@ class TransactionStripe extends Model
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
+    // Relation avec le mouvement de crédit
+    public function mouvementCredit()
+    {
+        return $this->hasOne(MouvementCredit::class, 'id_transaction_stripe', 'id_transaction');
+    }
+    // Relation avec la gestion de validation
+    public function gestionValidation()
+    {
+        return $this->hasOne(GestionValidation::class, 'id_transaction_stripe', 'id_transaction');
+    }
+
 }

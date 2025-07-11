@@ -26,4 +26,19 @@ class MouvementCredit extends Model
         'date_operation',
         'montant',
     ];
+    /**
+     * Get the utilisateur that owns the MouvementCredit.
+     */
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+    }
+    /**
+     * Get the gestionValidation that owns the MouvementCredit.
+     */
+    public function gestionValidation()
+    {
+        return $this->belongsTo(GestionValidation::class, 'id_gestionValidation');
+    }
+
 }
