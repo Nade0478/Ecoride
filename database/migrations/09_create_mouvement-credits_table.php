@@ -9,28 +9,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mouvement_credits', function (Blueprint $table) {
-            $table->id('id_mouvement_credit');
+            $table->id();
 
-            // Relation avec les utilisateurs
-            $table->foreignId('id_utilisateur')
-                  ->constrained('utilisateurs')
-                  ->onDelete('cascade');
+            // Lien vers l'utilisateur concerné
+            $table->foreignId('user_id')->constrained('utilisateurs')->onDelete('cascade');
 
-            // Type du mouvement : credit ou debit
-            $table->enum('type_mouvement', ['credit', 'debit'])
-                  ->default('credit')
-                  ->comment('Type de mouvement financier');
+            // Lien vers la validation éventuelle (peut être null)
+            $table->foreignId('gestion_validation_id')->nullable()->constrained('gestion_validations')->onDelete('set null');
 
-            // Montant en crédits, positif
-            $table->unsignedDecimal('montant', 8, 2)
-                  ->comment('Montant du mouvement en crédits');
+            // Type de mouvement : ajout, retrait, paiement, etc.
+            $table->enum('type_mouvement', ['ajout', 'retrait', 'paiement']);
 
-            // Motif métier : achat, bonus, remboursement, etc.
-            $table->string('motif', 100)->nullable()
-                  ->comment('Ex : bonus, achat, remboursement');
+            // Date de l'opération
+            $table->dateTime('date_operation');
 
-            // Date de l’opération (ajout automatique par défaut)
-            $table->dateTime('date_operation')->useCurrent();
+            // Montant du mouvement (positif, décimal)
+            $table->decimal('montant', 8, 2)->unsigned(); // ✅ correction ici
 
             $table->timestamps();
         });

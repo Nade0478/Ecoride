@@ -9,9 +9,11 @@ class CarModel extends Model
     protected $table = 'car_models';
 
     protected $fillable = [
-        'nom-model',
+        'id_car_model',
+        'nom_model',
+        'nb_places',
         'marque_id',
-        'voiture_id',
+        'voiture_id'
     ];
 
     public function marque()

@@ -16,6 +16,7 @@ class Voiture extends Model
         'immatriculation',
         'energie',
         'utilisateur_id'
+
     ];
     public function marque()
     {

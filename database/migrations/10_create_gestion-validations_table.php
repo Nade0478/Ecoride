@@ -9,28 +9,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('gestion_validations', function (Blueprint $table) {
-            $table->id('id_gestion_validation');
+            $table->id();
 
-            // Utilisateur qui valide
-            $table->foreignId('id_utilisateur')
-                  ->constrained('utilisateurs')
-                  ->onDelete('cascade');
+            // Lien vers l'utilisateur qui valide
+            $table->foreignId('user_id')->nullable()->constrained('utilisateurs')->onDelete('set null');
 
-            // Mouvement crédit concerné
-            $table->foreignId('id_mouvement_credit')
-                  ->constrained('mouvement_credits')
-                  ->onDelete('cascade');
+            // Type de validation (ex : avis, crédit, trajet)
+            $table->string('type_validation', 50);
 
-            // Type du mouvement validé : crédit ou débit
-            $table->enum('type_mouvement', ['credit', 'debit'])
-                  ->comment('Type du mouvement validé');
+            // Statut (validé, refusé, en attente)
+            $table->enum('statut', ['valide', 'refuse', 'en_attente'])->default('en_attente');
 
-            // Montant validé (positif, typiquement)
-            $table->unsignedDecimal('montant', 8, 2)
-                  ->comment('Montant validé en crédits');
+            // Montant éventuellement validé (si lié à un crédit)
+            $table->decimal('montant_valide', 8, 2)->unsigned()->nullable(); // ✅ correction ici
 
-            // Date de l’opération validée
-            $table->dateTime('date_operation')->useCurrent();
+            // Commentaire ou justification
+            $table->text('commentaire')->nullable();
 
             $table->timestamps();
         });

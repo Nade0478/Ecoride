@@ -12,7 +12,7 @@ class Avis extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
