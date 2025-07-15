@@ -13,13 +13,14 @@ class Marque extends Model
      */
     protected $fillable = [
         'nom-marque',
+        'id_carModel',
     ];
 
     /**
-     * Get the voitures for the marque.
+     * Get the carModel that owns the Marque.
      */
-    public function voitures()
+    public function carModel()
     {
-        return $this->hasMany(Voiture::class);
+        return $this->belongsTo(CarModel::class, 'id_carModel');
     }
 }

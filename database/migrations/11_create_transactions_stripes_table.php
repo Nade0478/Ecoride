@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('stripe_transaction_id')->unique();
 
             // Montant de la transaction
-            $table->decimal('montant', 8, 2)->unsigned(); // ✅ correction ici
+            $table->decimal('montant', 8, 2)->unsigned();
 
             // Statut de la transaction
             $table->enum('statut', ['en_attente', 'valide', 'refuse'])->default('en_attente');

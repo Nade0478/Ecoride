@@ -6,61 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Voiture extends Model
 {
-    protected $table = 'voitures';
+    protected $table = 'voiture';
+
+    protected $primaryKey = 'id_voiture'; // ✅ Correspond à la clé primaire dans le schéma
+
+    public $timestamps = true;
 
     protected $fillable = [
-        'marque_id',
-        'carModel_id',
-        'date-mise-en-circulation',
+        'date_mise_en_circulation',
         'couleur',
         'immatriculation',
         'energie',
-        'utilisateur_id'
-
+        'id_covoiturage',
+        'id_carModel',
+        'id_utilisateur'
     ];
-    public function marque()
-    {
-        return $this->belongsTo(Marque::class, 'marque_id');
-    }
-    public function carModel()
-    {
-        return $this->belongsTo(CarModel::class, 'carModel_id');
-    }
+
+    // Relations
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
-    public function covoiturages()
+
+    public function carModel()
     {
-        return $this->hasMany(Covoiturage::class, 'voiture_id');
+        return $this->belongsTo(CarModel::class, 'id_carModel');
     }
-    public function avis()
+
+    public function covoiturage()
     {
-        return $this->hasMany(Avis::class, 'id_covoiturage');
-    }
-    public function scopeWithMarqueAndModel($query)
-    {
-        return $query->with(['marque', 'carModel']);
-    }
-    public function scopeWithUtilisateur($query)
-    {
-        return $query->with('utilisateur');
-    }
-    public function scopeWithCovoiturages($query)
-    {
-        return $query->with('covoiturages');
-    }
-    public function scopeWithAvis($query)
-    {
-        return $query->with('avis');
-    }
-    public function scopeWithAllRelations($query)
-    {
-        return $query->with(['marque', 'carModel', 'utilisateur', 'covoiturages', 'avis']);
-    }
-    public function scopeWithAllRelationsAndCount($query)
-    {
-        return $query->withCount(['covoiturages', 'avis'])
-                     ->with(['marque', 'carModel', 'utilisateur']);
+        return $this->belongsTo(Covoiturage::class, 'id_covoiturage');
     }
 }

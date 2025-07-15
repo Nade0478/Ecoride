@@ -9,7 +9,6 @@ class Covoiturage extends Model
     protected $table = 'covoiturage';
 
     protected $fillable = [
-        'id_covoiturage',
         'date_depart',
         'date_arrivee',
         'heure_depart',
@@ -22,31 +21,29 @@ class Covoiturage extends Model
         'ecologique',
         'accepte_fumeur',
         'accepte_animal',
+        'id_gestionValidation',
         'id_utilisateur',
         'id_voiture',
+        'id_avis',
     ];
 
-    /**
-     * Relation avec l'utilisateur (conducteur)
-     */
+    // Relations
+    
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
-
-    /**
-     * Relation avec les avis associés au covoiturage
-     */
+    public function voiture()
+    {
+        return $this->belongsTo(Voiture::class, 'id_voiture');
+    }
+    public function gestionValidation()
+    {
+        return $this->hasOne(GestionValidation::class, 'id_covoiturage');
+    }
     public function avis()
     {
         return $this->hasMany(Avis::class, 'id_covoiturage');
     }
 
-    /**
-     * Relation avec la voiture utilisée pour le trajet
-     */
-    public function voiture()
-    {
-        return $this->belongsTo(Voiture::class, 'id_voiture');
-    }
 }

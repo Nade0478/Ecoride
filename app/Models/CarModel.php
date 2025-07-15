@@ -9,19 +9,18 @@ class CarModel extends Model
     protected $table = 'car_models';
 
     protected $fillable = [
-        'id_car_model',
         'nom_model',
         'nb_places',
-        'marque_id',
-        'voiture_id'
+        'id_voiture',
+        'id_marque',
     ];
 
     public function marque()
     {
-        return $this->belongsTo(Marque::class, 'marque_id');
+        return $this->belongsTo(Marque::class, 'id_marque');
     }
     public function voiture()
     {
-        return $this->belongsTo(Voiture::class, 'voiture_id');
+        return $this->belongsTo(Voiture::class, 'id_voiture');
     }
 }

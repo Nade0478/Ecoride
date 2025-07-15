@@ -19,12 +19,12 @@ class MouvementCredit extends Model
      * @var array<string>
      */
     protected $fillable = [
-        'id_mouvementCredit',
-        'id_utilisateur',
-        'id_gestionValidation',
         'type_mouvement',
         'date_operation',
         'montant',
+        'id_utilisateur',
+        'id_gestionValidation',
+        'id_transactionStripe'
     ];
     /**
      * Get the utilisateur that owns the MouvementCredit.
@@ -39,6 +39,14 @@ class MouvementCredit extends Model
     public function gestionValidation()
     {
         return $this->belongsTo(GestionValidation::class, 'id_gestionValidation');
+    }
+
+    /**
+     * Get the transactionStripe that owns the MouvementCredit.
+     */
+    public function transactionStripe()
+    {
+        return $this->belongsTo(TransactionStripe::class, 'id_transactionStripe');
     }
 
 }

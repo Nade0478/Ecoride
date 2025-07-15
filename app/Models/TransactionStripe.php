@@ -13,31 +13,24 @@ class TransactionStripe extends Model
 
     protected $table = 'transactions_stripe';
 
-    protected $primaryKey = 'id_transaction'; // 🔹 Doit correspondre à la migration
+    protected $primaryKey = 'id_transaction';
 
     protected $fillable = [
         'montant_euros',
         'date_paiement',
         'status',
         'montant_credits',
-        'stripe_payment_id',
         'id_utilisateur',
+        'id_mouvementCredit'
     ];
+// relations
 
-    // Relation avec l’utilisateur
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
     }
-    // Relation avec le mouvement de crédit
     public function mouvementCredit()
     {
-        return $this->hasOne(MouvementCredit::class, 'id_transaction_stripe', 'id_transaction');
+        return $this->hasOne(MouvementCredit::class, 'id_mouvementCredit');
     }
-    // Relation avec la gestion de validation
-    public function gestionValidation()
-    {
-        return $this->hasOne(GestionValidation::class, 'id_transaction_stripe', 'id_transaction');
-    }
-
 }

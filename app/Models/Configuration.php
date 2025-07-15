@@ -21,6 +21,7 @@ class Configuration extends Model
         'valeur',
         'categorie',
         'description',
+        'id_utilisateur'
     ];
 
     // Cast pour que les valeurs soient correctement interprétées
@@ -50,5 +51,18 @@ class Configuration extends Model
     public static function getValeur($cle)
     {
         return optional(self::where('cle', $cle)->first())->valeur;
+    }
+
+    // Relation
+    public function utilisateur()
+    {
+        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+    }
+    /**
+     * Scope pour récupérer les configurations par utilisateur
+     */
+    public function scopeParUtilisateur($query, $id_utilisateur)
+    {
+        return $query->where('id_utilisateur', $id_utilisateur);
     }
 }

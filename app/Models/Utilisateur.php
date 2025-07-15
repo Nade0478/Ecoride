@@ -21,14 +21,53 @@ class Utilisateur extends Model
         'photo',
         'pseudo',
         'credit_depenser',
-        'credit_gagner'
+        'credit_gagner',
+        'credit_total',
+        'id_role',
+        'id_mouvementCredit',
+        'id_transactionStripe',
+        'id_configuration',
+        'id_avis',
+        'id_covoiturage',
+        'id_voiture'
     ];
-    public function roles()
+
+    public $timestamps = true;
+
+    // Relations
+
+    public function role()
     {
-        return $this->belongsToMany(Role::class, 'role_utilisateur');
+        return $this->belongsTo(Role::class, 'role_id');
     }
+
     public function voitures()
     {
-        return $this->hasMany(Voiture::class, 'voiture_id');
+        return $this->hasMany(Voiture::class, 'id_utilisateur');
+    }
+
+    public function avis()
+    {
+        return $this->hasMany(Avis::class, 'id_utilisateur');
+    }
+
+    public function covoiturages()
+    {
+        return $this->hasMany(Covoiturage::class, 'id_utilisateur');
+    }
+
+    public function mouvementsCredits()
+    {
+        return $this->hasMany(MouvementCredit::class, 'id_utilisateur');
+    }
+
+    public function transactionsStripe()
+    {
+        return $this->hasMany(TransactionStripe::class, 'id_utilisateur');
+    }
+
+    public function configurations()
+    {
+        return $this->hasMany(Configuration::class, 'id_utilisateur');
     }
 }

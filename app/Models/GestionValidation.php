@@ -8,35 +8,33 @@ use App\Models\MouvementCredit;
 
 class GestionValidation extends Model
 {
-    // Si la clé primaire ne s'appelle pas "id", on l'indique ici
-    protected $primaryKey = 'id_gestion_validation';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'GestionValidations';
 
-    // Nom de la table dans la base de données
-    protected $table = 'gestion_validations';
-
-    // Attributs pouvant être remplis en masse
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
-        'id_gestion_validation',
-        'id_utilisateur',
-        'id_mouvement_credit',
-        'type_mouvement',
-        'date_operation',
-        'montant',
+        'valider',
+        'id_covoiturage',
+        'id_mouvementCredit',
     ];
+// Relation
 
-    /**
-     * Relation avec l'utilisateur qui a effectué la validation.
-     */
-    public function utilisateur()
-    {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
-    }
-
-    /**
-     * Relation avec le mouvement de crédit validé.
-     */
     public function mouvementCredit()
     {
-        return $this->belongsTo(MouvementCredit::class, 'id_MouvementCredit');
+        return $this->belongsTo(MouvementCredit::class, 'id_mouvementCredit');
+    }
+
+    public function covoiturage()
+    {
+        return $this->belongsTo(Covoiturage::class, 'id_covoiturage');
     }
 }
+
