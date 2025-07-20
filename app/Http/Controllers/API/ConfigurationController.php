@@ -12,7 +12,8 @@ class ConfigurationController extends Controller
      */
     public function index()
     {
-        return response()->json(Configuration::all());
+        $configurations = Configuration::orderBy('created_at', 'desc')->get();
+        return response()->json($configurations);
     }
 
     /**
