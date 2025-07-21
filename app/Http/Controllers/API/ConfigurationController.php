@@ -50,7 +50,7 @@ class ConfigurationController extends Controller
         $configuration = Configuration::findOrFail($id);
 
         $request->validate([
-            'cle' => 'sometimes|string|max:100|unique:configurations,cle,' . $id . ',id_configuration',
+            'cle' => 'sometimes|string|max:100|unique:configurations,cle,' . $id,
             'valeur' => 'nullable|string',
             'categorie' => 'nullable|string|max:50',
             'description' => 'nullable|string|max:255',

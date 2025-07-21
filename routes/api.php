@@ -9,6 +9,7 @@ use App\Http\Controllers\API\Role;
 use App\Http\Controllers\API\Utilisateur;
 use App\Http\Controllers\API\Voiture;
 use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\API\TransactionsStripeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -73,3 +74,8 @@ Route::apiResource('role-utilisateur', Role::class);
 
 // Route pour les configurations
 Route::apiResource('configuration', ConfigurationController::class);
+
+
+//Route pour stripe
+Route::apiResource('transactions-stripe', TransactionsStripeController::class);
+Route::post('payment-intent', [TransactionsStripeController::class, 'createPaymentIntent']);
