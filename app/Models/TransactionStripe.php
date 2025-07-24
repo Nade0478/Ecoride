@@ -27,7 +27,7 @@ class TransactionStripe extends Model
 
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+        return $this->belongsTo(\App\Models\Utilisateur::class, 'id_utilisateur');
     }
     public function mouvementCredit()
     {
