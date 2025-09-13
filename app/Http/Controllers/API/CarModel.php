@@ -4,22 +4,31 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\CarModel;
 
-// 🟨 Ajout d'un alias pour le modèle CarModel
-use App\Models\CarModel as CarModelModel;
-
-class CarModel extends Controller
+class CarModelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // 🟨 Utilisation de CarModelModel à la place de \App\Models\CarModel
-        $carModels = CarModelModel::with(['brand', 'category'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return response()->json($carModels);
+        try {
+            $carModels = CarModel::with(['marque']) // Selon votre MCD : marque au lieu de brand
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $carModels
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des modèles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -27,50 +36,127 @@ class CarModel extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            // 'brand_id' => 'required|exists:brands,id',
-            // 'category_id' => 'required|exists:categories,id',
-        ]);
+        try {
+            // Validation selon votre MCD
+            $validatedData = $request->validate([
+                'nom_modele' => 'required|string|max:255',
+                'nb_places' => 'required|integer|min:1|max:9', // Limite réaliste
+                'id_marque' => 'required|exists:marque,id_marque', // Selon votre MCD
+            ]);
 
-        // 🟨 Création d'un nouveau modèle avec l'alias CarModelModel
-        $carModel = CarModelModel::create($validatedData);
+            $carModel = CarModel::create($validatedData);
 
-        return response()->json($carModel, 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Modèle créé avec succès',
+                'data' => $carModel->load('marque')
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la création',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CarModelModel $carModel)
+    public function show($id)
     {
-        return response()->json($carModel->load(['brand', 'category']));
+        try {
+            $carModel = CarModel::with(['marque'])->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'data' => $carModel
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Modèle non trouvé'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CarModelModel $carModel)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            // 'brand_id' => 'sometimes|required|exists:brands,id',
-            // 'category_id' => 'sometimes|required|exists:categories,id',
-        ]);
+        try {
+            $carModel = CarModel::findOrFail($id);
 
-        $carModel->update($validatedData);
+            $validatedData = $request->validate([
+                'nom_modele' => 'sometimes|required|string|max:255',
+                'nb_places' => 'sometimes|required|integer|min:1|max:9',
+                'id_marque' => 'sometimes|required|exists:marque,id_marque',
+            ]);
 
-        return response()->json($carModel);
+            $carModel->update($validatedData);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Modèle mis à jour avec succès',
+                'data' => $carModel->load('marque')
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Modèle non trouvé'
+            ], 404);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CarModelModel $carModel)
+    public function destroy($id)
     {
-        $carModel->delete();
+        try {
+            $carModel = CarModel::findOrFail($id);
+            $carModel->delete();
 
-        return response()->json(['message' => 'Car model deleted successfully'], 204);
+            return response()->json([
+                'success' => true,
+                'message' => 'Modèle supprimé avec succès'
+            ], 200); // 200 au lieu de 204 pour inclure le message
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Modèle non trouvé'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la suppression',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

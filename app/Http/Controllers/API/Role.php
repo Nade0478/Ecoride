@@ -28,8 +28,9 @@ class Role extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'nom_role' => 'required|string|max:255',
             'permissions' => 'array',
+            'niveau_acceptation' => 'required|integer|min:1|max:5',
             'permissions.*' => 'exists:permissions,id',
         ]);
 

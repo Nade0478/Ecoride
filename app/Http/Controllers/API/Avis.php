@@ -32,6 +32,7 @@ class Avis extends Controller
             'utilisateur_id' => 'required|exists:utilisateurs,id',
             'note' => 'required|integer|min:1|max:5',
             'commentaire' => 'nullable|string|max:255',
+            'statut' => 'nullable|string|max:50',
         ]);
 
         // 🟨 Utilisation de l'alias AvisModel au lieu de \App\Models\Avis
@@ -40,6 +41,7 @@ class Avis extends Controller
         $avis->utilisateur_id = $request->utilisateur_id;
         $avis->note = $request->note;
         $avis->commentaire = $request->commentaire;
+        $avis->statut = $request->statut;
         $avis->save();
         return response()->json($avis, 201);
     }
@@ -60,9 +62,11 @@ class Avis extends Controller
         $request->validate([
             'note' => 'required|integer|min:1|max:5',
             'commentaire' => 'nullable|string|max:255',
+            'statut' => 'nullable|string|max:50',
         ]);
         $avis->note = $request->note;
         $avis->commentaire = $request->commentaire;
+        $avis->statut = $request->statut;
         $avis->save();
         return response()->json($avis);
     }
