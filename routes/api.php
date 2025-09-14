@@ -1,81 +1,64 @@
 <?php
 
-use App\Http\Controllers\API\Avis;
-use App\Http\Controllers\API\CarModel;
-use App\Http\Controllers\API\Covoiturage;
-use App\Http\Controllers\API\Marque;
-use App\Http\Controllers\API\Notification;
-use App\Http\Controllers\API\Role;
-use App\Http\Controllers\API\Utilisateur;
-use App\Http\Controllers\API\Voiture;
-use App\Http\Controllers\ConfigurationController;
-use App\Http\Controllers\API\TransactionsStripeController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\NotificationController;
+use App\Http\Controllers\API\MouvementController;
+use App\Http\Controllers\ConfigurationController;
+use App\Http\Controllers\API\RegleController;
+use App\Http\Controllers\API\ParticipationController;
+use App\Http\Controllers\API\VoitureController;
+use App\Http\Controllers\API\MarqueController;
+use App\Http\Controllers\API\CarModelController;
+use App\Http\Controllers\API\AvisController;
+use App\Http\Controllers\API\CovoiturageController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\UtilisateurController;
 
-
-Route::get('/api', function () {
-    return response()->json(['message' => 'Welcome to the API']);
+// ✅ Route d'accueil
+Route::get('/', function () {
+    return response()->json(['message' => 'Bienvenue sur l’API 🚀']);
 });
 
-Route::get('/api/utilisateur', function () {
-    return response()->json(['message' => 'Utilisateur endpoint']);
-});
-
-Route::get('/api/role', function () {
-    return response()->json(['message' => 'Role endpoint']);
-});
-
-Route::get('/api/voiture', function () {
-    return response()->json(['message' => 'Voiture endpoint']);
-});
-
-Route::get('/api/marque', function () {
-    return response()->json(['message' => 'Marque endpoint']);
-});
-
-Route::get('/api/car-model', function () {
-    return response()->json(['message' => 'Car Model endpoint']);
-});
-
-Route::get('/api/avis', function () {
-    return response()->json(['message' => 'Avis endpoint']);
-});
-
-Route::get('/api/covoiturage', function () {
-    return response()->json(['message' => 'Covoiturage endpoint']);
-});
-
-Route::get('/api/notification', function () {
-    return response()->json(['message' => 'Notification endpoint']);
-});
-
-Route::get('/api/role-utilisateur', function () {
-    return response()->json(['message' => 'Role Utilisateur endpoint']);
-});
-
-// Route pour les utilisateurs
-Route::apiResource('utilisateur', Utilisateur::class);
-// Route pour les rôles
-Route::apiResource('role', Role::class);
-// Route pour les voitures
-Route::apiResource('voiture', Voiture::class);
-// Route pour les marques
-Route::apiResource('marque', Marque::class);
-// Route pour les modèles de voiture
-Route::apiResource('car-model', CarModel::class);
-// Route pour les avis
-Route::apiResource('avis', Avis::class);
-// Route pour les covoiturages
-Route::apiResource('covoiturage', Covoiturage::class);
-// Route pour les rôles des utilisateurs
-Route::apiResource('role-utilisateur', Role::class);
-
-
-// Route pour les configurations
+// ✅ Routes API RESTful
+Route::apiResource('utilisateur', UtilisateurController::class);
+Route::apiResource('role', RoleController::class);
+Route::apiResource('mouvement', MouvementController::class);
 Route::apiResource('configuration', ConfigurationController::class);
+Route::apiResource('regle', RegleController::class);
+Route::apiResource('participation', ParticipationController::class);
+Route::apiResource('voiture', VoitureController::class);
+Route::apiResource('marque', MarqueController::class);
+Route::apiResource('car-model', CarModelController::class);
+Route::apiResource('avis', AvisController::class);
+Route::apiResource('covoiturage', CovoiturageController::class);
+Route::apiResource('notification', NotificationController::class);
 
+// ✅ Routes d'authentification
+Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('auth/register', [AuthController::class, 'register']);
+Route::post('auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('auth/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
-//Route pour stripe
-Route::apiResource('transactions-stripe', TransactionsStripeController::class);
-Route::post('payment-intent', [TransactionsStripeController::class, 'createPaymentIntent']);
+// À ajouter dans votre fichier routes/api.php
+
+// Routes spécifiques pour Regle
+Route::get('regles/actives', [RegleController::class, 'active']);
+Route::get('regles/type/{type}', [RegleController::class, 'byType']);
+
+// Routes spécifiques pour Participation
+Route::get('participations/utilisateur/{userId}', [ParticipationController::class, 'getParticipationsByUser']);
+Route::get('participations/covoiturage/{covoiturageId}', [ParticipationController::class, 'getParticipationsByCovoiturage']);
+Route::patch('participations/{idCovoiturage}/{idUtilisateur}/confirmer', [ParticipationController::class, 'confirmer']);
+
+// Routes spécifiques pour Mouvement
+Route::get('mouvements/utilisateur/{userId}', [MouvementController::class, 'getMouvementsByUser']);
+Route::get('mouvements/credits', [MouvementController::class, 'credits']);
+Route::get('mouvements/debits', [MouvementController::class, 'debits']);
+Route::get('mouvements/solde/{userId}', [MouvementController::class, 'soldeUtilisateur']);
+Route::get('mouvements/rapport/{annee}/{mois}', [MouvementController::class, 'rapportMensuel']);
+
+// Routes pour les participations avec clé composite
+Route::get('participations/{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'show']);
+Route::put('participations/{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'update']);
+Route::delete('participations/{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'destroy']);

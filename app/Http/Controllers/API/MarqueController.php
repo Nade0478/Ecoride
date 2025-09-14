@@ -4,18 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-// 🟨 Alias ajouté pour le modèle Marque
 use App\Models\Marque as MarqueModel;
 
-class Marque extends Controller
+class MarqueController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // 🟨 Utilisation de l'alias MarqueModel
         $marques = MarqueModel::with(['carModel'])
             ->orderBy('created_at', 'desc')
             ->get();
@@ -29,10 +26,8 @@ class Marque extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            // Add other fields as necessary
         ]);
 
-        // 🟨 Création via l'alias MarqueModel
         $marque = MarqueModel::create($validatedData);
 
         return response()->json($marque, 201);
@@ -53,7 +48,6 @@ class Marque extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|required|string|max:255',
-            // Add other fields as necessary
         ]);
 
         $marque->update($validatedData);

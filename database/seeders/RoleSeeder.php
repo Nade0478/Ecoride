@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
@@ -12,27 +13,44 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Role::create([
-            'name' => 'admin',
-            'description' => 'Administrator with full access',
-        ]);
+        // Vider la table avant d'insérer
+        DB::table('roles')->truncate();
 
-        \App\Models\Role::create([
-            'name' => 'user',
-            'description' => 'Regular user with limited access',
-        ]);
+        // Utiliser des insertions SQL brutes pour éviter les problèmes de cast JSON
+        $roles = [
+            [
+                'id_role' => 1,
+                'nom_role' => 'admin',
+                'permissions' => json_encode(['all', 'create', 'read', 'update', 'delete', 'manage_users', 'manage_system']),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_role' => 2,
+                'nom_role' => 'utilisateur',
+                'permissions' => json_encode(['read', 'create_covoiturage', 'participate']),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_role' => 3,
+                'nom_role' => 'moderateur',
+                'permissions' => json_encode(['read', 'update', 'moderate_content', 'manage_covoiturages']),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id_role' => 4,
+                'nom_role' => 'conducteur_premium',
+                'permissions' => json_encode(['read', 'create_covoiturage', 'participate', 'premium_features']),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
 
-        \App\Models\Role::create([
-            'name' => 'guest',
-            'description' => 'Guest user with minimal access',
-        ]);
-        \App\Models\Role::create([
-            'name' => 'moderator',
-            'description' => 'User with permissions to moderate content',
-        ]);
-        \App\Models\Role::create([
-            'name' => 'editor',
-            'description' => 'User with permissions to edit content',
-        ]);
+        // Insertion directe avec DB pour éviter les problèmes de cast
+        DB::table('roles')->insert($roles);
+
+        $this->command->info('Rôles créés avec succès !');
     }
 }

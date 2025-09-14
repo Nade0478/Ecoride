@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id('id_role');  // Clé primaire selon votre MCD
-            $table->string('nom-role');  // Nom selon votre MCD
-            $table->string('permissions');  // Permissions selon votre MCD
+        Schema::create('regles', function (Blueprint $table) {
+            $table->id('id_regle');
+            $table->boolean('actif')->default(true);
+            $table->decimal('montant_credit', 8, 2);
+            $table->string('type_action');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('regles');
     }
 };

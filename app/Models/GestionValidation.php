@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Utilisateur;
-use App\Models\MouvementCredit;
+use App\Models\Mouvement;
 
 class GestionValidation extends Model
 {
@@ -23,13 +23,13 @@ class GestionValidation extends Model
     protected $fillable = [
         'valider',
         'id_covoiturage',
-        'id_mouvementCredit',
+        'id_mouvement',
     ];
 // Relation
 
-    public function mouvementCredit()
+    public function mouvement()
     {
-        return $this->belongsTo(MouvementCredit::class, 'id_mouvementCredit');
+        return $this->belongsTo(Mouvement::class, 'id_mouvement');
     }
 
     public function covoiturage()
