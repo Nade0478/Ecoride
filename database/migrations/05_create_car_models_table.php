@@ -9,10 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('car_models', function (Blueprint $table) {
-            $table->id('id_model');
-            $table->string('car_models', 50); // renommé pour rester cohérent avec la table 'marques'
+            $table->id('id_carModel');
+            $table->string('nmodele', 50);
+            $table->integer('nb_places');
 
-            // Relation
             $table->foreignId('id_marque')
                   ->constrained('marques')
                   ->onDelete('cascade');

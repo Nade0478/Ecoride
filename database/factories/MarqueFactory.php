@@ -17,7 +17,7 @@ class MarqueFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company(),
+            'nmarque' => $this->faker->company(),
         ];
     }
 }

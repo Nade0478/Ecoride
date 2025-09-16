@@ -39,7 +39,7 @@ class CarModelController extends Controller
         try {
             // Validation selon votre MCD
             $validatedData = $request->validate([
-                'nom_modele' => 'required|string|max:255',
+                'nmodele' => 'required|string|max:255',
                 'nb_places' => 'required|integer|min:1|max:9', // Limite réaliste
                 'id_marque' => 'required|exists:marque,id_marque', // Selon votre MCD
             ]);
@@ -101,7 +101,7 @@ class CarModelController extends Controller
             $carModel = CarModel::findOrFail($id);
 
             $validatedData = $request->validate([
-                'nom_modele' => 'sometimes|required|string|max:255',
+                'nmodele' => 'sometimes|required|string|max:255',
                 'nb_places' => 'sometimes|required|integer|min:1|max:9',
                 'id_marque' => 'sometimes|required|exists:marque,id_marque',
             ]);

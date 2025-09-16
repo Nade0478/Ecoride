@@ -12,7 +12,7 @@ class Marque extends Model
      * @var array
      */
     protected $fillable = [
-        'nom-marque',
+        'nmarque',
         'id_carModel',
     ];
 

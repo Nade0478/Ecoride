@@ -25,7 +25,7 @@ class MarqueController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
+            'nmarque' => 'required|string|max:255',
         ]);
 
         $marque = MarqueModel::create($validatedData);
@@ -47,7 +47,7 @@ class MarqueController extends Controller
     public function update(Request $request, MarqueModel $marque)
     {
         $validatedData = $request->validate([
-            'name' => 'sometimes|required|string|max:255',
+            'nmarque' => 'sometimes|required|string|max:255',
         ]);
 
         $marque->update($validatedData);
