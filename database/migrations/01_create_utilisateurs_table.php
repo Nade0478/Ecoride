@@ -41,7 +41,7 @@ return new class extends Migration
             $table->string('id')->primary();
 
             // Correction ici : Laravel attend user_id, pas id_utilisateur
-            $table->foreignId('user_id')->nullable()->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('id_user')->nullable()->constrained('utilisateurs')->onDelete('cascade');
 
             $table->string('ip_address', 45)->nullable();
 

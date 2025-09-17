@@ -13,6 +13,8 @@ class Marque extends Model
      */
     protected $fillable = [
         'nmarque',
+        'nb_places',
+        'type',
         'id_carModel',
     ];
 

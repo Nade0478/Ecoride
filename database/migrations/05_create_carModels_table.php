@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id('id_carModel');
             $table->string('nmodele', 50);
             $table->integer('nb_places');
-
+            $table->string('type', 10);
             $table->foreignId('id_marque')
                   ->constrained('marques')
                   ->onDelete('cascade');
@@ -23,6 +23,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('car_models');
+        Schema::dropIfExists('carModels');
     }
 };

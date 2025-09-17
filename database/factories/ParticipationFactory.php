@@ -93,11 +93,11 @@ class ParticipationFactory extends Factory
     /**
      * State for specific user and covoiturage
      */
-    public function forUserAndCovoiturage(int $userId, int $covoiturageId): static
+    public function forUserAndCovoiturage(int $Iduser, int $Idcovoiturage): static
     {
         return $this->state(fn (array $attributes) => [
-            'id_utilisateur' => $userId,
-            'id_covoiturage' => $covoiturageId,
+            'id_utilisateur' => $Iduser,
+            'id_covoiturage' => $Idcovoiturage,
         ]);
     }
 }

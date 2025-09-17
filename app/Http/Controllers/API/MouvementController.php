@@ -21,8 +21,8 @@ class MouvementController extends Controller
             $query->where('type_mouvement', $request->type_mouvement);
         }
 
-        if ($request->has('utilisateur_id')) {
-            $query->where('id_utilisateur', $request->utilisateur_id);
+        if ($request->has('id_utilisateur')) {
+            $query->where('id_utilisateur', $request->id_utilisateur);
         }
 
         if ($request->has('date_debut') && $request->has('date_fin')) {
@@ -45,7 +45,7 @@ class MouvementController extends Controller
             'description' => 'nullable|string',
             'id_regle_credit' => 'nullable|exists:regles,id_regle',
             'id_covoiturage' => 'nullable|exists:covoiturages,id_covoiturage',
-            'id_utilisateur' => 'required|exists:utilisateurs,id',
+            'id_utilisateur' => 'required|exists:id_utilisateurs',
         ]);
 
         $mouvement = Mouvement::create($validatedData);
@@ -92,9 +92,9 @@ class MouvementController extends Controller
     /**
      * Get movements by user
      */
-    public function getMouvementsByUser($userId)
+    public function getMouvementsByUser($Iduser)
     {
-        $mouvements = Mouvement::where('id_utilisateur', $userId)
+        $mouvements = Mouvement::where('id_utilisateur', $Iduser)
             ->with(['regle', 'covoiturage'])
             ->orderBy('date_operation', 'desc')
             ->get();
@@ -131,20 +131,20 @@ class MouvementController extends Controller
     /**
      * Get user balance
      */
-    public function soldeUtilisateur($userId)
+    public function soldeUtilisateur($Iduser)
     {
-        $credits = Mouvement::where('id_utilisateur', $userId)
+        $credits = Mouvement::where('id_utilisateur', $Iduser)
             ->where('type_mouvement', 'credit')
             ->sum('montant');
 
-        $debits = Mouvement::where('id_utilisateur', $userId)
+        $debits = Mouvement::where('id_utilisateur', $Iduser)
             ->where('type_mouvement', 'debit')
             ->sum('montant');
 
         $solde = $credits - $debits;
 
         return response()->json([
-            'utilisateur_id' => $userId,
+            'id_utilisateur' => $Iduser,
             'credits' => $credits,
             'debits' => $debits,
             'solde' => $solde

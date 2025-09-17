@@ -115,9 +115,9 @@ class ParticipationController extends Controller
     /**
      * Get participations by user
      */
-    public function getParticipationsByUser($userId)
+    public function getParticipationsByUser($Iduser)
     {
-        $participations = Participation::where('id_utilisateur', $userId)
+        $participations = Participation::where('id_utilisateur', $Iduser)
             ->with('covoiturage')
             ->get();
 
@@ -127,9 +127,9 @@ class ParticipationController extends Controller
     /**
      * Get participations by covoiturage
      */
-    public function getParticipationsByCovoiturage($covoiturageId)
+    public function getParticipationsByCovoiturage($Idcovoiturage)
     {
-        $participations = Participation::where('id_covoiturage', $covoiturageId)
+        $participations = Participation::where('id_covoiturage', $Idcovoiturage)
             ->with('utilisateur')
             ->get();
 

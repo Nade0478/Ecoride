@@ -1,74 +1,166 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreConfigurationRequest;
+use App\Http\Requests\UpdateConfigurationRequest;
 use App\Models\Configuration;
+use App\Http\Resources\ConfigurationResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ConfigurationController extends Controller
 {
-    /**
-     * Liste tous les réglages
-     */
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $configurations = Configuration::orderBy('created_at', 'desc')->get();
-        return response()->json($configurations);
-    }
+        $query = Configuration::query();
+        $user = $request->user();
 
-    /**
-     * Affiche un réglage par son ID
-     */
-    public function show($id)
-    {
-        $configuration = Configuration::findOrFail($id);
-        return response()->json($configuration);
-    }
+        // Filtrage selon le rôle
+        if ($user && $user->hasRole('employee')) {
+            $query->whereIn('categorie', ['general', 'moderation', 'notifications'])
+                  ->where('modifiable_interface', true);
+        }
 
-    /**
-     * Création d'un nouveau réglage
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'cle' => 'required|string|max:100|unique:configurations,cle',
-            'valeur' => 'nullable|string',
-            'categorie' => 'nullable|string|max:50',
-            'description' => 'nullable|string|max:255',
+        // Filtres optionnels
+        if ($request->filled('categorie')) {
+            $query->where('categorie', $request->categorie);
+        }
+
+        if ($request->filled('modifiable_interface')) {
+            $query->where('modifiable_interface', $request->boolean('modifiable_interface'));
+        }
+
+        $configurations = $query->paginate(15);
+
+        return response()->json([
+            'success' => true,
+            'data' => ConfigurationResource::collection($configurations),
+            'pagination' => [
+                'current_page' => $configurations->currentPage(),
+                'last_page' => $configurations->lastPage(),
+                'per_page' => $configurations->perPage(),
+                'total' => $configurations->total(),
+            ]
         ]);
-
-        $configuration = Configuration::create($request->all());
-
-        return response()->json($configuration, 201);
     }
 
-    /**
-     * Mise à jour d'un réglage existant
-     */
-    public function update(Request $request, $id)
+    public function store(StoreConfigurationRequest $request): JsonResponse
     {
-        $configuration = Configuration::findOrFail($id);
+        $configuration = Configuration::create($request->validated());
 
-        $request->validate([
-            'cle' => 'sometimes|string|max:100|unique:configurations,cle,' . $id,
-            'valeur' => 'nullable|string',
-            'categorie' => 'nullable|string|max:50',
-            'description' => 'nullable|string|max:255',
+        return response()->json([
+            'success' => true,
+            'message' => 'Configuration créée avec succès',
+            'data' => new ConfigurationResource($configuration)
+        ], 201);
+    }
+
+    public function show(Request $request, Configuration $configuration): JsonResponse
+    {
+        if ($this->canAccessConfiguration($request, $configuration)) {
+            return response()->json([
+                'success' => true,
+                'data' => new ConfigurationResource($configuration)
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Accès non autorisé à cette configuration',
+            'error_code' => 'CONFIGURATION_ACCESS_DENIED'
+        ], 403);
+    }
+
+    public function update(UpdateConfigurationRequest $request, Configuration $configuration): JsonResponse
+    {
+        $configuration->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Configuration mise à jour avec succès',
+            'data' => new ConfigurationResource($configuration)
         ]);
-
-        $configuration->update($request->all());
-
-        return response()->json($configuration);
     }
 
-    /**
-     * Suppression d'un réglage
-     */
-    public function destroy($id)
+    public function destroy(Request $request, Configuration $configuration): JsonResponse
     {
-        $configuration = Configuration::findOrFail($id);
+        $user = $request->user();
+
+        if (!$user || !$user->hasRole('admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Seuls les administrateurs peuvent supprimer des configurations',
+                'error_code' => 'ADMIN_REQUIRED'
+            ], 403);
+        }
+
         $configuration->delete();
 
-        return response()->json(['message' => 'Réglage supprimé']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Configuration supprimée avec succès'
+        ], 204);
+    }
+
+    public function getByCategory(Request $request, string $categorie): JsonResponse
+    {
+        $user = $request->user();
+
+        $configurations = Configuration::where('categorie', $categorie)
+            ->when(!$user || !$user->hasRole('admin'), function ($query) {
+                return $query->where('modifiable_interface', true);
+            })
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => ConfigurationResource::collection($configurations),
+            'categorie' => $categorie,
+            'count' => $configurations->count()
+        ]);
+    }
+
+    public function getByKey(Request $request, string $cle): JsonResponse
+    {
+        $configuration = Configuration::where('cle', $cle)->first();
+
+        if (!$configuration) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Configuration non trouvée',
+                'error_code' => 'CONFIGURATION_NOT_FOUND'
+            ], 404);
+        }
+
+        if (!$this->canAccessConfiguration($request, $configuration)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Accès non autorisé à cette configuration',
+                'error_code' => 'CONFIGURATION_ACCESS_DENIED'
+            ], 403);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => new ConfigurationResource($configuration)
+        ]);
+    }
+
+    private function canAccessConfiguration(Request $request, Configuration $configuration): bool
+    {
+        $user = $request->user();
+
+        if (!$user) return false;
+
+        if ($user->hasRole('admin')) return true;
+
+        if ($user->hasRole('employee')) {
+            return $configuration->modifiable_interface &&
+                   in_array($configuration->categorie, ['general', 'moderation', 'notifications']);
+        }
+
+        return false;
     }
 }

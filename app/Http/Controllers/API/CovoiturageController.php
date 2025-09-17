@@ -44,7 +44,7 @@ class CovoiturageController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'organisateur_id' => 'required|exists:utilisateur,id_utilisateur',
+                'organisateur_id' => 'required|exists:utilisateurs,id_utilisateur',
                 'date_depart' => 'required|date|after:now',
                 'heure_depart' => 'required|date_format:H:i',
                 'date_arrivee' => 'nullable|date|after_or_equal:date_depart',
@@ -225,10 +225,10 @@ class CovoiturageController extends Controller
                 'id_utilisateur' => 'required|exists:utilisateur,id_utilisateur'
             ]);
 
-            $utilisateur_id = $validatedData['id_utilisateur'];
+            $id_utilisateur = $validatedData['id_utilisateur'];
 
             // Vérifications métier
-            if ($covoiturage->organisateur_id == $utilisateur_id) {
+            if ($covoiturage->organisateur_id == $id_utilisateur) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Vous ne pouvez pas participer à votre propre covoiturage'
@@ -244,7 +244,7 @@ class CovoiturageController extends Controller
 
             // Vérifier si l'utilisateur participe déjà
             $participationExistante = $covoiturage->participations()
-                ->where('id_utilisateur', $utilisateur_id)
+                ->where('id_utilisateur', $id_utilisateur)
                 ->first();
 
             if ($participationExistante) {
@@ -267,7 +267,7 @@ class CovoiturageController extends Controller
             }
 
             // TODO: Vérifier les crédits de l'utilisateur
-            // $utilisateur = Utilisateur::find($utilisateur_id);
+            // $utilisateur = Utilisateur::find($id_utilisateur);
             // $solde = $utilisateur->calculerSoldeCredits();
             // if ($solde < $covoiturage->prix_credit) {
             //     return response()->json([
@@ -278,7 +278,7 @@ class CovoiturageController extends Controller
 
             // Créer la participation
             $participation = $covoiturage->participations()->create([
-                'id_utilisateur' => $utilisateur_id,
+                'id_utilisateur' => $id_utilisateur,
                 'statut' => 'en_attente',
                 'date_inscription' => now()
             ]);
@@ -300,7 +300,7 @@ class CovoiturageController extends Controller
     /**
      * Accepter ou refuser un participant
      */
-    public function gererParticipation(Request $request, $id, $participationId)
+    public function gererParticipation(Request $request, $id, $Idparticipation)
     {
         try {
             $covoiturage = Covoiturage::findOrFail($id);
@@ -318,7 +318,7 @@ class CovoiturageController extends Controller
                 ], 403);
             }
 
-            $participation = $covoiturage->participations()->findOrFail($participationId);
+            $participation = $covoiturage->participations()->findOrFail($Idparticipation);
 
             $participation->update([
                 'statut' => $validatedData['statut'],

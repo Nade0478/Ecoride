@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_role');  // Clé primaire selon votre MCD
-            $table->string('nom_role');  // Nom selon votre MCD
-            $table->string('permissions');  // Permissions selon votre MCD
+        Schema::create('confs', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('confs');
     }
 };

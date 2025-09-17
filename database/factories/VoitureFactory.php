@@ -17,12 +17,10 @@ class VoitureFactory extends Factory
     public function definition(): array
     {
         return [
-            'model' => $this->faker->word(),
-            'year' => $this->faker->year(),
-            'color' => $this->faker->safeColorName(),
+            'modele' => $this->faker->word(),
+            'annee' => $this->faker->year(),
+            'couleur' => $this->faker->safeColorName(),
             'mileage' => $this->faker->numberBetween(0, 200000),
-            'price' => $this->faker->numberBetween(5000, 100000),
-            'in_stock' => $this->faker->boolean(70), // 70% chance of being in stock
-        ];
+            'license_plate' => strtoupper($this->faker->bothify('??###??')),];
     }
 }

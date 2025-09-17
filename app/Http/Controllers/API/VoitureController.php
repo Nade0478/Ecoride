@@ -28,10 +28,11 @@ class Voiture extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'marque_id' => 'required|exists:marques,id',
-            'car_model_id' => 'required|exists:car_models,id',
-            'year' => 'required|integer|min:1886|max:' . date('Y'),
-            'color' => 'required|string|max:50',
+            'id_marque' => 'required|exists:id_marques',
+            'id_carModel' => 'required|exists:id_carModels',
+            'annee' => 'required|integer|min:1886|max:' . date('Y'),
+            'couleur' => 'required|string|max:50',
+            'energie' => 'required|string|max:50',
             'license_plate' => 'required|string|max:20|unique:voitures,license_plate',
         ]);
 
@@ -55,10 +56,11 @@ class Voiture extends Controller
     public function update(Request $request, VoitureModel $voiture) // 🟨 Alias dans la signature
     {
         $validatedData = $request->validate([
-            'marque_id' => 'sometimes|exists:marques,id',
-            'car_model_id' => 'sometimes|exists:car_models,id',
-            'year' => 'sometimes|integer|min:1886|max:' . date('Y'),
+            'id_marque' => 'sometimes|exists:id_marques',
+            'id_carModel' => 'sometimes|exists:id_carModels',
+            'annee' => 'sometimes|integer|min:1886|max:' . date('Y'),
             'color' => 'sometimes|string|max:50',
+            'energie' => 'sometimes|string|max:50',
             'license_plate' => 'sometimes|string|max:20|unique:voitures,license_plate,' . $voiture->id,
         ]);
 

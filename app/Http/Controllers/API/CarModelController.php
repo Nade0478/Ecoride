@@ -14,7 +14,7 @@ class CarModelController extends Controller
     public function index()
     {
         try {
-            $carModels = CarModel::with(['marque']) // Selon votre MCD : marque au lieu de brand
+            $carModels = CarModel::with(['marque'])
                 ->orderBy('created_at', 'desc')
                 ->get();
 
@@ -40,8 +40,8 @@ class CarModelController extends Controller
             // Validation selon votre MCD
             $validatedData = $request->validate([
                 'nmodele' => 'required|string|max:255',
-                'nb_places' => 'required|integer|min:1|max:9', // Limite réaliste
-                'id_marque' => 'required|exists:marque,id_marque', // Selon votre MCD
+                'nb_places' => 'required|integer|min:1|max:9',
+                'id_marque' => 'required|exists:marques,id_marque',
             ]);
 
             $carModel = CarModel::create($validatedData);

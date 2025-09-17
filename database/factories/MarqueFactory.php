@@ -18,6 +18,9 @@ class MarqueFactory extends Factory
     {
         return [
             'nmarque' => $this->faker->company(),
+            'nb_places' => $this->faker->numberBetween(2, 8),
+            'type' => $this->faker->randomElement(['sedan', 'suv', 'hatchback', 'convertible', 'coupe']),
+            'id_carModel' => \App\Models\CarModel::factory(),
         ];
     }
 }

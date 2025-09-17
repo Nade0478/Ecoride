@@ -20,28 +20,28 @@ class RoleSeeder extends Seeder
         $roles = [
             [
                 'id_role' => 1,
-                'nom_role' => 'admin',
+                'nom-role' => 'admin',
                 'permissions' => json_encode(['all', 'create', 'read', 'update', 'delete', 'manage_users', 'manage_system']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_role' => 2,
-                'nom_role' => 'utilisateur',
+                'nom-role' => 'utilisateur',
                 'permissions' => json_encode(['read', 'create_covoiturage', 'participate']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_role' => 3,
-                'nom_role' => 'moderateur',
+                'nom-role' => 'moderateur',
                 'permissions' => json_encode(['read', 'update', 'moderate_content', 'manage_covoiturages']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'id_role' => 4,
-                'nom_role' => 'conducteur_premium',
+                'nom-role' => 'conducteur_premium',
                 'permissions' => json_encode(['read', 'create_covoiturage', 'participate', 'premium_features']),
                 'created_at' => now(),
                 'updated_at' => now(),
