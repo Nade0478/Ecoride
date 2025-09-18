@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('prenom', 50);
             $table->string('email', 50)->unique();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('telephone', 50)->nullable();
             $table->string('adresse', 50)->nullable();
             $table->string('cp', 10)->nullable();
@@ -24,7 +25,6 @@ return new class extends Migration
             $table->string('pseudo', 50)->nullable();
             $table->integer('credit_depenser')->default(0);
             $table->integer('credit_gagner')->default(0);
-
             $table->foreignId('id_role')->constrained('roles')->onDelete('cascade');
             $table->timestamps();
         });
@@ -40,12 +40,12 @@ return new class extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
 
-            // Correction ici : Laravel attend id_use, pas id_user
-            $table->foreignId('id_user')->nullable()->constrained('users')->onDelete('cascade');
+            // Laravel attend id_use, pas user_id
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
 
             $table->string('ip_address', 45)->nullable();
 
-            // Correction : Laravel utilise user_agent
+            // Laravel utilise user_agent
             $table->text('user_agent')->nullable();
 
             $table->longText('payload');
