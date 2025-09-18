@@ -8,8 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Table utilisateurs
-        Schema::create('utilisateurs', function (Blueprint $table) {
+        // Table Users
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nom', 50);
             $table->string('prenom', 50);
@@ -40,8 +40,8 @@ return new class extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
 
-            // Correction ici : Laravel attend user_id, pas id_utilisateur
-            $table->foreignId('id_user')->nullable()->constrained('utilisateurs')->onDelete('cascade');
+            // Correction ici : Laravel attend id_use, pas id_user
+            $table->foreignId('id_user')->nullable()->constrained('users')->onDelete('cascade');
 
             $table->string('ip_address', 45)->nullable();
 
@@ -57,6 +57,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('utilisateurs');
+        Schema::dropIfExists('users');
     }
 };

@@ -20,8 +20,8 @@ return new class extends Migration
                   ->constrained('car_models')
                   ->onDelete('cascade');
 
-            $table->foreignId('id_utilisateur')
-                  ->constrained('utilisateurs')
+            $table->foreignId('id_user')
+                  ->constrained('users')
                   ->onDelete('cascade');
 
             $table->timestamps();

@@ -14,15 +14,15 @@ class MouvementController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Mouvement::with(['utilisateur', 'regle', 'covoiturage']);
+        $query = Mouvement::with(['user', 'regle', 'covoiturage']);
 
         // Filtres optionnels
         if ($request->has('type_mouvement')) {
             $query->where('type_mouvement', $request->type_mouvement);
         }
 
-        if ($request->has('id_utilisateur')) {
-            $query->where('id_utilisateur', $request->id_utilisateur);
+        if ($request->has('id_user')) {
+            $query->where('id_user', $request->id_user);
         }
 
         if ($request->has('date_debut') && $request->has('date_fin')) {
@@ -45,12 +45,12 @@ class MouvementController extends Controller
             'description' => 'nullable|string',
             'id_regle_credit' => 'nullable|exists:regles,id_regle',
             'id_covoiturage' => 'nullable|exists:covoiturages,id_covoiturage',
-            'id_utilisateur' => 'required|exists:id_utilisateurs',
+            'id_user' => 'required|exists:id_users',
         ]);
 
         $mouvement = Mouvement::create($validatedData);
 
-        return response()->json($mouvement->load(['utilisateur', 'regle', 'covoiturage']), 201);
+        return response()->json($mouvement->load(['user', 'regle', 'covoiturage']), 201);
     }
 
     /**
@@ -58,7 +58,7 @@ class MouvementController extends Controller
      */
     public function show(Mouvement $mouvement)
     {
-        return response()->json($mouvement->load(['utilisateur', 'regle', 'covoiturage']));
+        return response()->json($mouvement->load(['user', 'regle', 'covoiturage']));
     }
 
     /**
@@ -76,7 +76,7 @@ class MouvementController extends Controller
 
         $mouvement->update($validatedData);
 
-        return response()->json($mouvement->load(['utilisateur', 'regle', 'covoiturage']));
+        return response()->json($mouvement->load(['user', 'regle', 'covoiturage']));
     }
 
     /**
@@ -94,7 +94,7 @@ class MouvementController extends Controller
      */
     public function getMouvementsByUser($Iduser)
     {
-        $mouvements = Mouvement::where('id_utilisateur', $Iduser)
+        $mouvements = Mouvement::where('id_user', $Iduser)
             ->with(['regle', 'covoiturage'])
             ->orderBy('date_operation', 'desc')
             ->get();
@@ -108,7 +108,7 @@ class MouvementController extends Controller
     public function credits()
     {
         $mouvements = Mouvement::credit()
-            ->with(['utilisateur', 'regle'])
+            ->with(['user', 'regle'])
             ->orderBy('date_operation', 'desc')
             ->get();
 
@@ -121,7 +121,7 @@ class MouvementController extends Controller
     public function debits()
     {
         $mouvements = Mouvement::debit()
-            ->with(['utilisateur', 'regle'])
+            ->with(['user', 'regle'])
             ->orderBy('date_operation', 'desc')
             ->get();
 
@@ -131,20 +131,20 @@ class MouvementController extends Controller
     /**
      * Get user balance
      */
-    public function soldeUtilisateur($Iduser)
+    public function soldeUser($Iduser)
     {
-        $credits = Mouvement::where('id_utilisateur', $Iduser)
+        $credits = Mouvement::where('id_user', $Iduser)
             ->where('type_mouvement', 'credit')
             ->sum('montant');
 
-        $debits = Mouvement::where('id_utilisateur', $Iduser)
+        $debits = Mouvement::where('id_user', $Iduser)
             ->where('type_mouvement', 'debit')
             ->sum('montant');
 
         $solde = $credits - $debits;
 
         return response()->json([
-            'id_utilisateur' => $Iduser,
+            'id_user' => $Iduser,
             'credits' => $credits,
             'debits' => $debits,
             'solde' => $solde
@@ -160,7 +160,7 @@ class MouvementController extends Controller
         $fin = Carbon::create($annee, $mois, 1)->endOfMonth();
 
         $mouvements = Mouvement::betweenDates($debut, $fin)
-            ->with(['utilisateur', 'regle'])
+            ->with(['user', 'regle'])
             ->get();
 
         $totalCredits = $mouvements->where('type_mouvement', 'credit')->sum('montant');

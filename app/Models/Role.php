@@ -27,7 +27,7 @@ class RoleSeeder extends Seeder
             ],
             [
                 'id_role' => 2,
-                'nom_role' => 'utilisateur',
+                'nom_role' => 'user',
                 'permissions' => json_encode(['read', 'create_covoiturage', 'participate']),
                 'created_at' => now(),
                 'updated_at' => now(),

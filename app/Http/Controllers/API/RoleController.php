@@ -37,7 +37,7 @@ class RoleController extends Controller  // Nom correct : RoleController, pas Ro
      */
     public function show(Role $role)
     {
-        return response()->json($role->load('utilisateurs'));
+        return response()->json($role->load('users'));
     }
 
     /**

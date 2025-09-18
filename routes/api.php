@@ -11,7 +11,7 @@ use App\Http\Controllers\API\NotificationController;
 use App\Http\Controllers\API\ParticipationController;
 use App\Http\Controllers\API\RegleController;
 use App\Http\Controllers\API\RoleController;
-use App\Http\Controllers\API\UtilisateurController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ConfigurationController;
 
 // Routes d'accueil de l'API
@@ -21,7 +21,7 @@ Route::get('/', function () {
         'version' => '1.0',
         'status' => 'active',
         'available_endpoints' => [
-            'utilisateurs' => '/api/utilisateurs',
+            'users' => '/api/users',
             'roles' => '/api/roles',
             'mouvements' => '/api/mouvements',
             'regles' => '/api/regles',
@@ -35,7 +35,7 @@ Route::get('/', function () {
 });
 
 // Routes API RESTful de base
-Route::apiResource('utilisateurs', UtilisateurController::class);
+Route::apiResource('users', UserController::class);
 Route::apiResource('roles', RoleController::class);
 Route::apiResource('mouvements', MouvementController::class);
 Route::apiResource('regles', RegleController::class);
@@ -49,20 +49,20 @@ Route::get('regles/actives', [RegleController::class, 'active']);
 Route::get('regles/type/{type}', [RegleController::class, 'byType']);
 
 // Routes spécifiques pour Mouvement
-Route::get('mouvements/utilisateur/{Iduser}', [MouvementController::class, 'getMouvementsByUser']);
+Route::get('mouvements/user/{Iduser}', [MouvementController::class, 'getMouvementsByUser']);
 Route::get('mouvements/credits', [MouvementController::class, 'credits']);
 Route::get('mouvements/debits', [MouvementController::class, 'debits']);
-Route::get('mouvements/solde/{Iduser}', [MouvementController::class, 'soldeUtilisateur']);
+Route::get('mouvements/solde/{Iduser}', [MouvementController::class, 'soldeUser']);
 Route::get('mouvements/rapport/{annee}/{mois}', [MouvementController::class, 'rapportMensuel']);
 
 // Routes spécifiques pour Participation
 Route::prefix('participations')->group(function () {
-    Route::get('utilisateur/{iduser}', [ParticipationController::class, 'getParticipationsByUser']);
+    Route::get('user/{iduser}', [ParticipationController::class, 'getParticipationsByUser']);
     Route::get('covoiturage/{idcovoiturage}', [ParticipationController::class, 'getParticipationsByCovoiturage']);
-    Route::get('{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'show']);
-    Route::put('{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'update']);
-    Route::delete('{idCovoiturage}/{idUtilisateur}', [ParticipationController::class, 'destroy']);
-    Route::patch('{idCovoiturage}/{idUtilisateur}/confirmer', [ParticipationController::class, 'confirmer']);
+    Route::get('{idCovoiturage}/{idUser}', [ParticipationController::class, 'show']);
+    Route::put('{idCovoiturage}/{idUser}', [ParticipationController::class, 'update']);
+    Route::delete('{idCovoiturage}/{idUser}', [ParticipationController::class, 'destroy']);
+    Route::patch('{idCovoiturage}/{idUser}/confirmer', [ParticipationController::class, 'confirmer']);
 });
 
 // === ROUTES CONFIGURATION ECORIDE AVEC AUTHENTIFICATION ===

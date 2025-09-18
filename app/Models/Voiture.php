@@ -19,13 +19,13 @@ class Voiture extends Model
         'energie',
         'id_covoiturage',
         'id_carModel',
-        'id_utilisateur'
+        'id_user'
     ];
 
     // Relations
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+        return $this->belongsTo(User::class, 'id_user');
     }
 
     public function carModel()

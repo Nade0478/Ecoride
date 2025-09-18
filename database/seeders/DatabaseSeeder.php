@@ -11,7 +11,7 @@ use Database\Seeders\MouvementSeeder;
 use Database\Seeders\ParticipationSeeder;
 use Database\Seeders\RegleSeeder;
 use Database\Seeders\RoleSeeder;
-use Database\Seeders\UtilisateurSeeder;
+use Database\Seeders\UserSeeder;
 use Database\Seeders\VoitureSeeder;
 use Illuminate\Database\Seeder;
 
@@ -27,13 +27,13 @@ class DatabaseSeeder extends Seeder
             // 1. Tables de base (sans dépendances)
             RoleSeeder::class,
 
-            // 2. Utilisateurs (dépend des rôles)
-            UtilisateurSeeder::class,
+            // 2. Users (dépend des rôles)
+            UserSeeder::class,
 
             // 3. Règles (indépendant)
             RegleSeeder::class,
 
-            // 4. Autres tables qui dépendent des utilisateurs
+            // 4. Autres tables qui dépendent des users
             ConfigurationSeeder::class,
             MarqueSeeder::class,
             CarModelSeeder::class,
@@ -59,7 +59,7 @@ class DatabaseSeeder extends Seeder
     private function seedWithFactories(): void
     {
         // Créer des données de test avec les factories
-        \App\Models\Utilisateur::factory(20)->create();
+        \App\Models\User::factory(20)->create();
         \App\Models\Regle::factory(10)->create();
         \App\Models\Covoiturage::factory(15)->create();
         \App\Models\Participation::factory(50)->create();

@@ -21,11 +21,11 @@ return new class extends Migration
             $table->boolean('accepte_fumeur')->default(false);
             $table->boolean('accepte_animal')->default(false);
             $table->unsignedBigInteger('prix_credit');
-            $table->string('statut', 50)->default('disponible'); 
+            $table->string('statut', 50)->default('disponible');
 
             // Relations
-            $table->foreignId('id_utilisateur')
-                  ->constrained('utilisateurs')
+            $table->foreignId('id_user')
+                  ->constrained('users')
                   ->onDelete('cascade');
 
             $table->foreignId('id_voiture')

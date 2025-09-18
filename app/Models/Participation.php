@@ -18,7 +18,7 @@ class Participation extends Model
      * The primary key associated with the table.
      * Clé primaire composite
      */
-    protected $primaryKey = ['id_covoiturage', 'id_utilisateur'];
+    protected $primaryKey = ['id_covoiturage', 'id_user'];
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -30,7 +30,7 @@ class Participation extends Model
      */
     protected $fillable = [
         'id_covoiturage',
-        'id_utilisateur',
+        'id_user',
         'date_inscription',
         'date_validation',
         'statut',
@@ -47,12 +47,12 @@ class Participation extends Model
     ];
 
     /**
-     * Relation avec l'utilisateur
-     * Une participation appartient à un utilisateur
+     * Relation avec l'user
+     * Une participation appartient à un user
      */
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     /**

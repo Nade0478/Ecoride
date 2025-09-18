@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Covoiturage;
-use App\Models\Utilisateur;
+use App\Models\User;
 
 class CovoiturageController extends Controller
 {
@@ -16,8 +16,8 @@ class CovoiturageController extends Controller
     {
         try {
             $covoiturages = Covoiturage::with([
-                'organisateur:id_utilisateur,nom,prenom,photo',
-                'participations.utilisateur:id_utilisateur,nom,prenom,photo',
+                'organisateur:id_user,nom,prenom,photo',
+                'participations.user:id_user,nom,prenom,photo',
                 'voiture:id_voiture,immatriculation,couleur,energie'
             ])
             ->where('statut', '!=', 'annule')
@@ -44,7 +44,7 @@ class CovoiturageController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'organisateur_id' => 'required|exists:utilisateurs,id_utilisateur',
+                'organisateur_id' => 'required|exists:users,id_user',
                 'date_depart' => 'required|date|after:now',
                 'heure_depart' => 'required|date_format:H:i',
                 'date_arrivee' => 'nullable|date|after_or_equal:date_depart',
@@ -93,10 +93,10 @@ class CovoiturageController extends Controller
     {
         try {
             $covoiturage = Covoiturage::with([
-                'organisateur:id_utilisateur,nom,prenom,photo,telephone',
+                'organisateur:id_user,nom,prenom,photo,telephone',
                 'participations' => function($query) {
                     $query->where('statut', '!=', 'refuse')
-                          ->with('utilisateur:id_utilisateur,nom,prenom,photo');
+                          ->with('user:id_user,nom,prenom,photo');
                 },
                 'voiture.marque',
                 'avis'
@@ -222,13 +222,13 @@ class CovoiturageController extends Controller
             $covoiturage = Covoiturage::findOrFail($id);
 
             $validatedData = $request->validate([
-                'id_utilisateur' => 'required|exists:utilisateur,id_utilisateur'
+                'id_user' => 'required|exists:user,id_user'
             ]);
 
-            $id_utilisateur = $validatedData['id_utilisateur'];
+            $id_user = $validatedData['id_user'];
 
             // Vérifications métier
-            if ($covoiturage->organisateur_id == $id_utilisateur) {
+            if ($covoiturage->organisateur_id == $id_user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Vous ne pouvez pas participer à votre propre covoiturage'
@@ -242,9 +242,9 @@ class CovoiturageController extends Controller
                 ], 422);
             }
 
-            // Vérifier si l'utilisateur participe déjà
+            // Vérifier si l'user participe déjà
             $participationExistante = $covoiturage->participations()
-                ->where('id_utilisateur', $id_utilisateur)
+                ->where('id_user', $id_user)
                 ->first();
 
             if ($participationExistante) {
@@ -266,9 +266,9 @@ class CovoiturageController extends Controller
                 ], 422);
             }
 
-            // TODO: Vérifier les crédits de l'utilisateur
-            // $utilisateur = Utilisateur::find($id_utilisateur);
-            // $solde = $utilisateur->calculerSoldeCredits();
+            // TODO: Vérifier les crédits de l'user
+            // $user = user::find($id_user);
+            // $solde = $user->calculerSoldeCredits();
             // if ($solde < $covoiturage->prix_credit) {
             //     return response()->json([
             //         'success' => false,
@@ -278,7 +278,7 @@ class CovoiturageController extends Controller
 
             // Créer la participation
             $participation = $covoiturage->participations()->create([
-                'id_utilisateur' => $id_utilisateur,
+                'id_user' => $id_user,
                 'statut' => 'en_attente',
                 'date_inscription' => now()
             ]);
@@ -286,7 +286,7 @@ class CovoiturageController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Demande de participation envoyée',
-                'data' => $participation->load('utilisateur')
+                'data' => $participation->load('user')
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -307,10 +307,10 @@ class CovoiturageController extends Controller
 
             $validatedData = $request->validate([
                 'statut' => 'required|in:accepte,refuse',
-                'organisateur_id' => 'required|exists:utilisateur,id_utilisateur'
+                'organisateur_id' => 'required|exists:user,id_user'
             ]);
 
-            // Vérifier que l'utilisateur est bien l'organisateur
+            // Vérifier que l'user est bien l'organisateur
             if ($covoiturage->organisateur_id != $validatedData['organisateur_id']) {
                 return response()->json([
                     'success' => false,
@@ -332,7 +332,7 @@ class CovoiturageController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'data' => $participation->load('utilisateur')
+                'data' => $participation->load('user')
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

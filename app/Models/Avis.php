@@ -13,7 +13,7 @@ class Avis extends Model
         'commentaire',
         'statut',
         'id_covoiturage',
-        'id_utilisateur'
+        'id_user'
     ];
  // Relations
 
@@ -22,8 +22,8 @@ class Avis extends Model
         return $this->belongsTo(Covoiturage::class, 'id_covoiturage');
     }
 
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

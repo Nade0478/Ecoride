@@ -13,7 +13,7 @@ class Avis extends Controller
      */
     public function index()
     {
-        $avis = AvisModel::with(['covoiturage', 'utilisateur'])
+        $avis = AvisModel::with(['covoiturage', 'user'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -27,7 +27,7 @@ class Avis extends Controller
     {
         $request->validate([
             'id_covoiturage' => 'required|exists:covoiturages,id_covoiturage',
-            'id_utilisateur' => 'required|exists:utilisateurs,id_utilisateur',
+            'id_user' => 'required|exists:users,id_user',
             'valeur' => 'required|integer|min:1|max:5',
             'commentaire' => 'nullable|string|max:255',
             'statut' => 'nullable|string|max:50',
@@ -35,7 +35,7 @@ class Avis extends Controller
 
         $avis = new AvisModel();
         $avis->id_covoiturage = $request->id_covoiturage;
-        $avis->id_utilisateur = $request->id_utilisateur;
+        $avis->id_user = $request->id_user;
         $avis->valeur = $request->valeur;
         $avis->commentaire = $request->commentaire;
         $avis->statut = $request->statut;
@@ -49,7 +49,7 @@ class Avis extends Controller
      */
     public function show(AvisModel $avis)
     {
-        return response()->json($avis->load(['covoiturage', 'utilisateur']));
+        return response()->json($avis->load(['covoiturage', 'user']));
     }
 
     /**

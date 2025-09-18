@@ -24,7 +24,7 @@ class RoleFactory extends Factory
     {
         $roles = [
             'admin',
-            'utilisateur',
+            'user',
             'moderateur',
             'conducteur_premium',
             'passager_regulier'
@@ -62,7 +62,7 @@ class RoleFactory extends Factory
     public function user(): static
     {
         return $this->state(fn (array $attributes) => [
-            'nom_role' => 'utilisateur',
+            'nom_role' => 'user',
             'permissions' => ['read', 'create_covoiturage', 'participate'],
         ]);
     }

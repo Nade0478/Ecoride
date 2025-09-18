@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('gestion_validations', function (Blueprint $table) {
             $table->id();
 
-            // Lien vers l'utilisateur qui valide
-            $table->foreignId('user_id')->nullable()->constrained('utilisateurs')->onDelete('set null');
+            // Lien vers l'user qui valide
+            $table->foreignId('id_user')->nullable()->constrained('users')->onDelete('set null');
 
             // Type de validation (ex : avis, crédit, trajet)
             $table->string('type_validation', 50);

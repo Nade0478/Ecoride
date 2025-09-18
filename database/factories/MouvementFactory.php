@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Mouvement;
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Regle;
 use App\Models\Covoiturage;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -61,7 +61,7 @@ class MouvementFactory extends Factory
             'id_covoiturage' => $this->faker->boolean(40)
                 ? Covoiturage::factory()
                 : null,
-            'id_utilisateur' => Utilisateur::factory(),
+            'id_user' => User::factory(),
         ];
     }
 
@@ -128,7 +128,7 @@ class MouvementFactory extends Factory
     public function forUser(int $Iduser): static
     {
         return $this->state(fn (array $attributes) => [
-            'id_utilisateur' => $Iduser,
+            'id_user' => $Iduser,
         ]);
     }
 

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Participation;
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Covoiturage;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
@@ -15,12 +15,12 @@ class ParticipationSeeder extends Seeder
      */
     public function run(): void
     {
-        // Récupérer quelques utilisateurs et covoiturages pour créer des participations
-        $utilisateurs = Utilisateur::limit(10)->get();
+        // Récupérer quelques users et covoiturages pour créer des participations
+        $users = User::limit(10)->get();
         $covoiturages = Covoiturage::limit(5)->get();
 
-        if ($utilisateurs->isEmpty() || $covoiturages->isEmpty()) {
-            $this->command->warn('Assurez-vous d\'avoir des utilisateurs et covoiturages avant de lancer ce seeder');
+        if ($users->isEmpty() || $covoiturages->isEmpty()) {
+            $this->command->warn('Assurez-vous d\'avoir des users et covoiturages avant de lancer ce seeder');
             return;
         }
 
@@ -30,15 +30,15 @@ class ParticipationSeeder extends Seeder
         foreach ($covoiturages as $covoiturage) {
             // Créer 2-4 participations par covoiturage
             $nombreParticipants = rand(2, 4);
-            $utilisateursSelectionnes = $utilisateurs->random($nombreParticipants);
+            $usersSelectionnes = $users->random($nombreParticipants);
 
-            foreach ($utilisateursSelectionnes as $utilisateur) {
+            foreach ($usersSelectionnes as $user) {
                 $dateInscription = Carbon::now()->subDays(rand(1, 30));
                 $statut = $statuts[array_rand($statuts)];
 
                 $participation = [
                     'id_covoiturage' => $covoiturage->id_covoiturage,
-                    'id_utilisateur' => $utilisateur->id,
+                    'id_user' => $user->id,
                     'date_inscription' => $dateInscription,
                     'date_validation' => $statut === 'confirmee' ? $dateInscription->addHours(rand(1, 24)) : null,
                     'statut' => $statut,
@@ -55,7 +55,7 @@ class ParticipationSeeder extends Seeder
         foreach ($participations as $participation) {
             $exists = Participation::where([
                 'id_covoiturage' => $participation['id_covoiturage'],
-                'id_utilisateur' => $participation['id_utilisateur']
+                'id_user' => $participation['id_user']
             ])->exists();
 
             if (!$exists) {

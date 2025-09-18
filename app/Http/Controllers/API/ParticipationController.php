@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Participation;
 use App\Models\Covoiturage;
-use App\Models\Utilisateur;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ParticipationController extends Controller
@@ -15,7 +15,7 @@ class ParticipationController extends Controller
      */
     public function index()
     {
-        $participations = Participation::with(['utilisateur', 'covoiturage'])
+        $participations = Participation::with(['user', 'covoiturage'])
             ->orderBy('date_inscription', 'desc')
             ->get();
 
@@ -29,7 +29,7 @@ class ParticipationController extends Controller
     {
         $validatedData = $request->validate([
             'id_covoiturage' => 'required|exists:covoiturages,id_covoiturage',
-            'id_utilisateur' => 'required|exists:utilisateurs,id',
+            'id_user' => 'required|exists:users,id',
             'statut' => 'required|string|in:en_attente,confirmee,annulee',
             'presente' => 'sometimes|boolean',
         ]);
@@ -37,7 +37,7 @@ class ParticipationController extends Controller
         // Vérifier si la participation n'existe pas déjà
         $existingParticipation = Participation::where([
             'id_covoiturage' => $validatedData['id_covoiturage'],
-            'id_utilisateur' => $validatedData['id_utilisateur']
+            'id_user' => $validatedData['id_user']
         ])->first();
 
         if ($existingParticipation) {
@@ -48,18 +48,18 @@ class ParticipationController extends Controller
 
         $participation = Participation::create($validatedData);
 
-        return response()->json($participation->load(['utilisateur', 'covoiturage']), 201);
+        return response()->json($participation->load(['user', 'covoiturage']), 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($idCovoiturage, $idUtilisateur)
+    public function show($idCovoiturage, $idUser)
     {
         $participation = Participation::where([
             'id_covoiturage' => $idCovoiturage,
-            'id_utilisateur' => $idUtilisateur
-        ])->with(['utilisateur', 'covoiturage'])->first();
+            'id_user' => $idUser
+        ])->with(['user', 'covoiturage'])->first();
 
         if (!$participation) {
             return response()->json(['message' => 'Participation non trouvée'], 404);
@@ -71,11 +71,11 @@ class ParticipationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $idCovoiturage, $idUtilisateur)
+    public function update(Request $request, $idCovoiturage, $idUser)
     {
         $participation = Participation::where([
             'id_covoiturage' => $idCovoiturage,
-            'id_utilisateur' => $idUtilisateur
+            'id_user' => $idUser
         ])->first();
 
         if (!$participation) {
@@ -90,17 +90,17 @@ class ParticipationController extends Controller
 
         $participation->update($validatedData);
 
-        return response()->json($participation->load(['utilisateur', 'covoiturage']));
+        return response()->json($participation->load(['user', 'covoiturage']));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($idCovoiturage, $idUtilisateur)
+    public function destroy($idCovoiturage, $idUser)
     {
         $participation = Participation::where([
             'id_covoiturage' => $idCovoiturage,
-            'id_utilisateur' => $idUtilisateur
+            'id_user' => $idUser
         ])->first();
 
         if (!$participation) {
@@ -117,7 +117,7 @@ class ParticipationController extends Controller
      */
     public function getParticipationsByUser($Iduser)
     {
-        $participations = Participation::where('id_utilisateur', $Iduser)
+        $participations = Participation::where('id_user', $Iduser)
             ->with('covoiturage')
             ->get();
 
@@ -130,7 +130,7 @@ class ParticipationController extends Controller
     public function getParticipationsByCovoiturage($Idcovoiturage)
     {
         $participations = Participation::where('id_covoiturage', $Idcovoiturage)
-            ->with('utilisateur')
+            ->with('user')
             ->get();
 
         return response()->json($participations);
@@ -139,11 +139,11 @@ class ParticipationController extends Controller
     /**
      * Confirm participation
      */
-    public function confirmer($idCovoiturage, $idUtilisateur)
+    public function confirmer($idCovoiturage, $idUser)
     {
         $participation = Participation::where([
             'id_covoiturage' => $idCovoiturage,
-            'id_utilisateur' => $idUtilisateur
+            'id_user' => $idUser
         ])->first();
 
         if (!$participation) {

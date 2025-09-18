@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Utilisateur;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 
@@ -21,7 +21,7 @@ class GestionValidationFactory extends Factory
         return [
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
             'comments' => $this->faker->optional()->sentence(),
-            'validated_by' => \App\Models\Utilisateur::factory(), // Assuming a relation to User model
+            'validated_by' => \App\Models\User::factory(), // Assuming a relation to User model
             'validated_at' => $this->faker->optional()->dateTimeThisYear(),
         ];
     }

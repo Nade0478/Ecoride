@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Mouvement;
 
 class GestionValidation extends Model

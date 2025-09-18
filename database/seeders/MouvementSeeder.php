@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Mouvement;
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Regle;
 use App\Models\Covoiturage;
 use Illuminate\Database\Seeder;
@@ -16,12 +16,12 @@ class MouvementSeeder extends Seeder
      */
     public function run(): void
     {
-        $utilisateurs = Utilisateur::limit(10)->get();
+        $users = User::limit(10)->get();
         $regles = Regle::where('actif', true)->get();
         $covoiturages = Covoiturage::limit(5)->get();
 
-        if ($utilisateurs->isEmpty()) {
-            $this->command->warn('Assurez-vous d\'avoir des utilisateurs avant de lancer ce seeder');
+        if ($users->isEmpty()) {
+            $this->command->warn('Assurez-vous d\'avoir des users avant de lancer ce seeder');
             return;
         }
 
@@ -44,8 +44,8 @@ class MouvementSeeder extends Seeder
             ]
         ];
 
-        foreach ($utilisateurs as $utilisateur) {
-            // Créer 3-8 mouvements par utilisateur
+        foreach ($users as $user) {
+            // Créer 3-8 mouvements par user
             $nombreMouvements = rand(3, 8);
 
             for ($i = 0; $i < $nombreMouvements; $i++) {
@@ -72,7 +72,7 @@ class MouvementSeeder extends Seeder
                     'id_covoiturage' => ($typeMouvement === 'credit' && $covoiturages->isNotEmpty())
                         ? $covoiturages->random()->id_covoiturage
                         : null,
-                    'id_utilisateur' => $utilisateur->id,
+                    'id_user' => $user->id,
                     'created_at' => $dateOperation,
                     'updated_at' => now(),
                 ];
@@ -82,15 +82,15 @@ class MouvementSeeder extends Seeder
         }
 
         // Créer quelques mouvements spéciaux pour demo
-        $this->createSpecialMovements($utilisateurs->first(), $regles);
+        $this->createSpecialMovements($users->first(), $regles);
     }
 
     /**
      * Créer des mouvements spéciaux pour la démonstration
      */
-    private function createSpecialMovements($utilisateur, $regles)
+    private function createSpecialMovements($user, $regles)
     {
-        if (!$utilisateur || $regles->isEmpty()) return;
+        if (!$user || $regles->isEmpty()) return;
 
         $mouvementsSpeciaux = [
             [
@@ -115,7 +115,7 @@ class MouvementSeeder extends Seeder
         foreach ($mouvementsSpeciaux as $mouvement) {
             Mouvement::create(array_merge($mouvement, [
                 'date_operation' => now()->subDays(rand(1, 7)),
-                'id_utilisateur' => $utilisateur->id,
+                'id_user' => $user->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]));

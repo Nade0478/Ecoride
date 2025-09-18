@@ -22,16 +22,16 @@ class Covoiturage extends Model
         'accepte_fumeur',
         'accepte_animal',
         'id_gestionValidation',
-        'id_utilisateur',
+        'id_user',
         'id_voiture',
         'id_avis',
     ];
 
     // Relations
-    
-    public function utilisateur()
+
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+        return $this->belongsTo(User::class, 'id_user');
     }
     public function voiture()
     {

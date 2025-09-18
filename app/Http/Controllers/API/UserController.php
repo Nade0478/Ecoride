@@ -4,13 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Utilisateur;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class UtilisateurController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,18 +18,18 @@ class UtilisateurController extends Controller
     public function index()
     {
         try {
-            $utilisateurs = Utilisateur::with('role')
+            $user = User::with('role')
                 ->orderBy('created_at', 'desc')
                 ->get();
 
             return response()->json([
                 'success' => true,
-                'data' => $utilisateurs
+                'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Erreur lors de la récupération des utilisateurs',
+                'message' => 'Erreur lors de la récupération des users',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -43,7 +43,7 @@ class UtilisateurController extends Controller
         try {
             $validatedData = $request->validate([
                 'nom' => 'required|string|max:255',
-                'email' => 'required|email|unique:utilisateurs,email',
+                'email' => 'required|email|unique:users,email',
                 'prenom' => 'required|string|max:255',
                 'telephone' => 'nullable|string|max:20',
                 'adresse' => 'nullable|string|max:255',
@@ -63,7 +63,7 @@ class UtilisateurController extends Controller
                 $photoPath = $request->file('photo')->store('photos', 'public');
             }
 
-            $utilisateur = Utilisateur::create([
+            $user = User::create([
                 'nom' => $validatedData['nom'],
                 'prenom' => $validatedData['prenom'],
                 'telephone' => $validatedData['telephone'] ?? null,
@@ -82,8 +82,8 @@ class UtilisateurController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Utilisateur créé avec succès',
-                'data' => $utilisateur->load('role')
+                'message' => 'User créé avec succès',
+                'data' => $user->load('role')
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -106,16 +106,16 @@ class UtilisateurController extends Controller
     public function show($id)
     {
         try {
-            $utilisateur = Utilisateur::with('role')->findOrFail($id);
+            $user = User::with('role')->findOrFail($id);
 
             return response()->json([
                 'success' => true,
-                'data' => $utilisateur
+                'data' => $user
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Utilisateur non trouvé'
+                'message' => 'User non trouvé'
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
@@ -132,7 +132,7 @@ class UtilisateurController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $utilisateur = Utilisateur::findOrFail($id);
+            $user = User::findOrFail($id);
 
             $validatedData = $request->validate([
                 'nom' => 'sometimes|required|string|max:255',
@@ -146,35 +146,35 @@ class UtilisateurController extends Controller
                 'pseudo' => 'sometimes|nullable|string|max:50',
                 'credit_depenser' => 'sometimes|nullable|numeric|min:0',
                 'credit_gagner' => 'sometimes|nullable|numeric|min:0',
-                'email' => 'sometimes|required|email|unique:utilisateurs,email,' . $utilisateur->id,
+                'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
                 'password' => 'sometimes|required|string|min:8',
                 'id_role' => 'sometimes|required|exists:roles,id',
             ]);
 
             foreach ($validatedData as $key => $value) {
                 if ($key === 'password') {
-                    $utilisateur->password = Hash::make($value);
+                    $user->password = Hash::make($value);
                 } elseif ($key === 'photo') {
-                    if ($utilisateur->photo && Storage::disk('public')->exists($utilisateur->photo)) {
-                        Storage::disk('public')->delete($utilisateur->photo);
+                    if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                        Storage::disk('public')->delete($user->photo);
                     }
-                    $utilisateur->photo = $request->file('photo')->store('photos', 'public');
+                    $user->photo = $request->file('photo')->store('photos', 'public');
                 } else {
-                    $utilisateur->$key = $value;
+                    $user->$key = $value;
                 }
             }
 
-            $utilisateur->save();
+            $user->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Utilisateur mis à jour avec succès',
-                'data' => $utilisateur->load('role')
+                'message' => 'User mis à jour avec succès',
+                'data' => $user->load('role')
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Utilisateur non trouvé'
+                'message' => 'User non trouvé'
             ], 404);
         } catch (ValidationException $e) {
             return response()->json([
@@ -197,22 +197,22 @@ class UtilisateurController extends Controller
     public function destroy($id)
     {
         try {
-            $utilisateur = Utilisateur::findOrFail($id);
+            $user = User::findOrFail($id);
 
-            if ($utilisateur->photo && Storage::disk('public')->exists($utilisateur->photo)) {
-                Storage::disk('public')->delete($utilisateur->photo);
+            if ($user->photo && Storage::disk('public')->exists($user->photo)) {
+                Storage::disk('public')->delete($user->photo);
             }
 
-            $utilisateur->delete();
+            $user->delete();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Utilisateur supprimé avec succès'
+                'message' => 'User supprimé avec succès'
             ], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Utilisateur non trouvé'
+                'message' => 'User non trouvé'
             ], 404);
         } catch (\Exception $e) {
             return response()->json([

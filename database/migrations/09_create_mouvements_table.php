@@ -19,14 +19,14 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('id_regle_credit')->nullable();
             $table->string('id_covoiturage')->nullable();
-            $table->unsignedBigInteger('id_utilisateur');
+            $table->unsignedBigInteger('id_user');
             $table->timestamps();
 
-            // Clé étrangère vers utilisateurs
-            $table->foreign('id_utilisateur')->references('id')->on('utilisateurs')->onDelete('cascade');
+            // Clé étrangère vers users
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
 
             // Index pour améliorer les performances
-            $table->index(['id_utilisateur', 'date_operation']);
+            $table->index(['id_user', 'date_operation']);
             $table->index('type_mouvement');
         });
     }

@@ -29,7 +29,7 @@ class Mouvement extends Model
         'description',
         'id_regle_credit',
         'id_covoiturage',
-        'id_utilisateur',
+        'id_user',
     ];
 
     /**
@@ -41,12 +41,12 @@ class Mouvement extends Model
     ];
 
     /**
-     * Relation avec l'utilisateur
-     * Un mouvement appartient à un utilisateur
+     * Relation avec l'user
+     * Un mouvement appartient à un user
      */
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'id_utilisateur', 'id');
+        return $this->belongsTo(User::class, 'id_user', 'id');
     }
 
     /**

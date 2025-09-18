@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Participation;
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Covoiturage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
@@ -30,7 +30,7 @@ class ParticipationFactory extends Factory
 
         return [
             'id_covoiturage' => Covoiturage::factory(),
-            'id_utilisateur' => Utilisateur::factory(),
+            'id_user' => User::factory(),
             'date_inscription' => $dateInscription,
             'date_validation' => $statut === 'confirmee'
                 ? $this->faker->dateTimeBetween($dateInscription, 'now')
@@ -96,7 +96,7 @@ class ParticipationFactory extends Factory
     public function forUserAndCovoiturage(int $Iduser, int $Idcovoiturage): static
     {
         return $this->state(fn (array $attributes) => [
-            'id_utilisateur' => $Iduser,
+            'id_user' => $Iduser,
             'id_covoiturage' => $Idcovoiturage,
         ]);
     }

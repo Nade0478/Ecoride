@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id('id_avis');
 
             // Relations
-            $table->foreignId('id_utilisateur')
-                  ->constrained('utilisateurs')
+            $table->foreignId('id_user')
+                  ->constrained('users')
                   ->onDelete('cascade');
 
             $table->foreignId('id_covoiturage')
