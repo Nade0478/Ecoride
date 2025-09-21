@@ -54,11 +54,11 @@ class MouvementSeeder extends Seeder
 
                 // Définir le montant selon le type
                 if ($typeMouvement === 'credit') {
-                    $montant = rand(100, 2000) / 100; // 1.00 à 20.00 €
+                    $montant = rand(100, 2000) / 100;
                     $regle = $regles->isNotEmpty() ? $regles->random() : null;
                     $description = $descriptions['credit'][array_rand($descriptions['credit'])];
                 } else {
-                    $montant = rand(50, 1500) / 100; // 0.50 à 15.00 €
+                    $montant = rand(50, 1500) / 100;
                     $regle = null;
                     $description = $descriptions['debit'][array_rand($descriptions['debit'])];
                 }

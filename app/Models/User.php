@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
     protected $table = 'users';
 
@@ -21,9 +23,9 @@ class User extends Authenticatable
         'date_naissance',
         'photo',
         'pseudo',
-        'credit_depenser',
-        'credit_gagner',
+        'credits',
         'email',
+        'statut',
         'password',
         'id_role',
     ];
@@ -36,12 +38,21 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'date_naissance' => 'date',
-        'credit_depenser' => 'decimal:2',
-        'credit_gagner' => 'decimal:2',
+        'credits' => 'integer',
     ];
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     public function role()
     {
-        return $this->belongsTo(Role::class, 'id_role', 'id');
+        return $this->belongsTo(Role::class, 'id_role', 'id_role');
     }
 }
+

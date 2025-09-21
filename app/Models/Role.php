@@ -1,56 +1,20 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Models;
 
-use App\Models\Role;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
 
-class RoleSeeder extends Seeder
+class Role extends Model
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-        // Vider la table avant d'insérer
-        DB::table('roles')->truncate();
+    protected $table = 'roles';
+    protected $primaryKey = 'id_role';
 
-        // Utiliser des insertions SQL brutes pour éviter les problèmes de cast JSON
-        $roles = [
-            [
-                'id_role' => 1,
-                'nom_role' => 'admin',
-                'permissions' => json_encode(['all', 'create', 'read', 'update', 'delete', 'manage_users', 'manage_system']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_role' => 2,
-                'nom_role' => 'user',
-                'permissions' => json_encode(['read', 'create_covoiturage', 'participate']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_role' => 3,
-                'nom_role' => 'moderateur',
-                'permissions' => json_encode(['read', 'update', 'moderate_content', 'manage_covoiturages']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'id_role' => 4,
-                'nom_role' => 'conducteur_premium',
-                'permissions' => json_encode(['read', 'create_covoiturage', 'participate', 'premium_features']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ];
+    protected $fillable = [
+        'nom_role',
+        'permissions'
+    ];
 
-        // Insertion directe avec DB pour éviter les problèmes de cast
-        DB::table('roles')->insert($roles);
-
-        $this->command->info('Rôles créés avec succès !');
-    }
+    protected $casts = [
+        'permissions' => 'array'
+    ];
 }

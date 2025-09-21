@@ -10,33 +10,23 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Récupération dynamique des rôles
-        $adminRole = Role::where('nom_role', 'admin')->first();
-        $userRole = Role::where('nom_role', 'user')->first();
-        $moderateurRole = Role::where('nom_role', 'moderateur')->first();
-        $premiumRole = Role::where('nom_role', 'conducteur_premium')->first();
+        $visiteurRole = Role::where('nom_role', 'visiteur')->first();
+        $passagerRole = Role::where('nom_role', 'passager')->first();
+        $chauffeurRole = Role::where('nom_role', 'chauffeur')->first();
+        $employeRole = Role::where('nom_role', 'employe')->first();
+        $adminRole = Role::where('nom_role', 'administrateur')->first();
 
-        // Vérification de l'existence des rôles
-        if (!$adminRole || !$userRole || !$moderateurRole || !$premiumRole) {
-            $this->command->error('Un ou plusieurs rôles sont manquants. Vérifiez le RoleSeeder.');
+        if (!$visiteurRole || !$passagerRole || !$chauffeurRole || !$employeRole || !$adminRole) {
+            $this->command->error('Un ou plusieurs rôles EcoRide sont manquants.');
             return;
         }
 
-        // Création des users avec les rôles dynamiques
-        User::factory(10)->create([
-            'id_role' => $userRole->id_role,
-        ]);
+        User::factory(15)->create(['id_role' => $passagerRole->id_role]);
+        User::factory(8)->create(['id_role' => $chauffeurRole->id_role]);
+        User::factory(2)->create(['id_role' => $employeRole->id_role]);
+        User::factory(1)->create(['id_role' => $adminRole->id_role]);
+        User::factory(3)->create(['id_role' => $visiteurRole->id_role]);
 
-        User::factory(2)->create([
-            'id_role' => $adminRole->id_role,
-        ]);
-
-        User::factory(1)->create([
-            'id_role' => $moderateurRole->id_role,
-        ]);
-
-        User::factory(1)->create([
-            'id_role' => $premiumRole->id_role,
-        ]);
+        $this->command->info('Utilisateurs EcoRide créés avec succès !');
     }
 }

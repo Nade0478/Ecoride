@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+
 class UserController extends Controller
 {
     /**
@@ -52,8 +53,8 @@ class UserController extends Controller
                 'date_naissance' => 'nullable|date',
                 'photo' => 'nullable|image|max:2048',
                 'pseudo' => 'nullable|string|max:50',
-                'credit_depenser' => 'nullable|numeric|min:0',
-                'credit_gagner' => 'nullable|numeric|min:0',
+                'credits' => 'nullable|numeric|min:0',
+                'statut' => 'nullable|string|max:50',
                 'password' => 'required|string|min:8',
                 'id_role' => 'required|exists:roles,id',
             ]);
@@ -73,9 +74,9 @@ class UserController extends Controller
                 'date_naissance' => $validatedData['date_naissance'] ?? null,
                 'photo' => $photoPath,
                 'pseudo' => $validatedData['pseudo'] ?? null,
-                'credit_depenser' => $validatedData['credit_depenser'] ?? 0,
-                'credit_gagner' => $validatedData['credit_gagner'] ?? 0,
+                'credits' => $validatedData['credits'] ?? 0,
                 'email' => $validatedData['email'],
+                'statut' => $validatedData['statut'] ?? 'actif',
                 'password' => Hash::make($validatedData['password']),
                 'id_role' => $validatedData['id_role'],
             ]);
@@ -144,9 +145,9 @@ class UserController extends Controller
                 'date_naissance' => 'sometimes|nullable|date',
                 'photo' => 'sometimes|nullable|image|max:2048',
                 'pseudo' => 'sometimes|nullable|string|max:50',
-                'credit_depenser' => 'sometimes|nullable|numeric|min:0',
-                'credit_gagner' => 'sometimes|nullable|numeric|min:0',
+                'credits' => 'sometimes|nullable|numeric|min:0',
                 'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+                'statut' => 'sometimes|nullable|string|max:50',
                 'password' => 'sometimes|required|string|min:8',
                 'id_role' => 'sometimes|required|exists:roles,id',
             ]);
